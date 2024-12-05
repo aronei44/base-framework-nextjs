@@ -18,13 +18,13 @@ const safecall : SafeCallFunction = async ({name, tracer, fn}) => {
             name,
             success,
             result,
-            error,
+            error: error?.message,
             executionTimeMS: endTimer - startTimer,
             tracer
         });
     }
     return {
-        data: result || null,
+        data: result || error,
         tracer
     };
 };

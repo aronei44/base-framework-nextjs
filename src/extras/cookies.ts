@@ -3,20 +3,24 @@
 import { cookies } from "next/headers";
 import safecall from "./safecall";
 
-const getCookies = async (key: string) => {
-    const {data} = await safecall({
+export const getCookies = async (key: string, tracer?: number) => {
+    return await safecall({
         name: "getCookies",
+        tracer,
         fn: async () => {
             const cookie = await cookies();
             return cookie.get(key)?.value;
         }
-    })
-    return data;
+    }) as {
+        data: string,
+        tracer: number
+    }
 };
 
-export const setCookies = async (key: string, value: string) => {
-    await safecall({
+export const setCookies = async (key: string, value: string, tracer?: number) => {
+    return await safecall({
         name: "setCookies",
+        tracer,
         fn: async () => {
             const cookie = await cookies();
             cookie.set(key, value);
@@ -24,14 +28,13 @@ export const setCookies = async (key: string, value: string) => {
     })
 };
 
-export const removeCookies = async (key: string) => {
-    await safecall({
+export const removeCookies = async (key: string, tracer?: number) => {
+    return await safecall({
         name: "removeCookies",
+        tracer,
         fn: async () => {
             const cookie = await cookies();
             cookie.delete(key);
         }
     })
 };
-
-export default getCookies;

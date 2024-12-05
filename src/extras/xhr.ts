@@ -18,7 +18,7 @@ const callApi: CallApiFunction = async ({
     tracer,
     name
 }) => {
-    const { data: response} = await safecall({
+    return await safecall({
         name: name ?? "callApi",
         tracer,
         fn: async () => {
@@ -32,10 +32,9 @@ const callApi: CallApiFunction = async ({
                 timeout,
                 withCredentials
             });
-            return res.data as Record<string, AllType> | null;
+            return res.data as AllType;
         }
-    });
-    return { data: response, tracer: tracer ?? 0 };
+    }) as { data: AllType, tracer: number };
 };
 
 export default callApi;
