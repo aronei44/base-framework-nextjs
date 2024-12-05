@@ -1,18 +1,9 @@
 import { logger } from "./logger";
-
-type AllType = string | number | boolean | object | null | undefined;
-
-type SafeCall = {
-    name?: string;
-    tracer?: number;
-    fn: () => Promise<AllType | void>;
-}
-
-type SafeCallFunction = (data: SafeCall) => Promise<{ data: AllType; tracer: number; }>;
+import { SafeCallFunction, AllType } from "./types";
 
 const safecall : SafeCallFunction = async ({name, tracer, fn}) => {
     const startTimer = Date.now();
-    let result: AllType | void = null;
+    let result: AllType = null;
     let success = true;
     let error: Error | null = null;
     try {
@@ -28,7 +19,7 @@ const safecall : SafeCallFunction = async ({name, tracer, fn}) => {
             success,
             result,
             error,
-            time: endTimer - startTimer,
+            executionTimeMS: endTimer - startTimer,
             tracer
         });
     }
