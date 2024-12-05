@@ -13,7 +13,8 @@ export const getCookies = async (key: string, tracer?: number) => {
         }
     }) as {
         data: string,
-        tracer: number
+        tracer: number,
+        error: boolean
     }
 };
 

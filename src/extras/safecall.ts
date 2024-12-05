@@ -25,7 +25,8 @@ const safecall : SafeCallFunction = async ({name, tracer, fn}) => {
     }
     return {
         data: result || error,
-        tracer
+        tracer,
+        error: !success
     };
 };
 

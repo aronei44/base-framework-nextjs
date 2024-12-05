@@ -34,7 +34,7 @@ const callApi: CallApiFunction = async ({
             });
             return res.data as AllType;
         }
-    }) as { data: AllType, tracer: number };
+    }) as { data: AllType, tracer: number, error: boolean };
 };
 
 export default callApi;

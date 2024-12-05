@@ -9,7 +9,7 @@ export type SafeCall = {
     fn: () => Promise<AllType | void>;
 }
 
-export type SafeCallFunction = (data: SafeCall) => Promise<{ data: AllType; tracer: number; }>;
+export type SafeCallFunction = (data: SafeCall) => Promise<{ data: AllType; tracer: number; error: boolean }>;
 
 
 // xhr.ts
@@ -27,4 +27,4 @@ export type CallApi = {
     name?: string;
 }
 
-export type CallApiFunction = (data: CallApi) => Promise<{ data: AllType; tracer: number; }>;
+export type CallApiFunction = (data: CallApi) => Promise<{ data: AllType; tracer: number; error: boolean }>;
