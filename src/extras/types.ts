@@ -28,3 +28,12 @@ export type CallApi = {
 }
 
 export type CallApiFunction = (data: CallApi) => Promise<{ data: AllType; tracer: number; error: boolean }>;
+
+
+// redis.ts
+export type RedisType = {
+    host: string,
+    port: number,
+    password: string,
+    db: number
+}
