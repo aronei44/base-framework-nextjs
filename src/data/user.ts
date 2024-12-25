@@ -6,7 +6,8 @@ import { z } from "zod";
 const UserCreateSchema = z.object({
     username: z.string().min(1),
     name: z.string().min(1),
-    password: z.string().min(1)
+    password: z.string().min(1),
+    role: z.string().min(1),
 });
 
 const UserUpdateSchema = z.object({
@@ -41,7 +42,7 @@ const createUser = async (user: User, tracer?: number) => {
     if (!validationResult.success) {
         throw new Error(validationResult.error.errors[0].message);
     }
-    const query = `INSERT INTO users (username, name, password) VALUES ('${user.username}', '${user.name}', '${user.password}')`;
+    const query = `INSERT INTO users (username, name, password, role) VALUES ('${user.username}', '${user.name}', '${user.password}', '${user.role}')`;
     const {error} = await dbconn(query, tracer);
     return !error;
 }
