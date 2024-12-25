@@ -38,10 +38,8 @@ const login = async (username: string, password: string) => {
                 return {success: false, message: 'Invalid password'};
             }
             const id = user.username + "-" + encodeSignature(user.username, config.JWT_SECRET);
-            const userdata = {
-                username: user.username,
-                name: user.name
-            };
+            const userdata = user;
+            delete userdata.password;
             const userjwt = await encrypt(userdata, tracer);
             await (await redis(securityRedisOptions)).set(id, userjwt.data, 'EX', parseInt(config.SESSION_TIMEOUT));
             const cookies = await setCookies('session', id, tracer);
@@ -69,7 +67,7 @@ const register = async (user: User) => {
                 return {success: false, message: 'User already exists'};
             }
             const hash = await bcrypt.hash(user.password as string, 10);
-            const success = await createUser({username: user.username, name: user.name, password: hash}, tracer);
+            const success = await createUser({username: user.username, name: user.name, password: hash, role_id: user.role_id as string}, tracer);
             return {success, message: success ? 'User created' : 'Error creating user'};
         }
     }) as {

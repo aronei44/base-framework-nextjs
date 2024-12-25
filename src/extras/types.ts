@@ -1,4 +1,4 @@
-import { User } from "@/data/types";
+import { Application, User } from "@/data/types";
 import Swal from "sweetalert2";
 
 type AllPrimitiveType = string | number | boolean | null | undefined | void | object;
@@ -51,6 +51,7 @@ export type AuthContextType = {
     state: {
         form: LoginData;
         user: User | null;
+        application: Application[];
     };
     action: {
         Login: (props: LoginData) => Promise<void>;

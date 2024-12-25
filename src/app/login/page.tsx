@@ -19,7 +19,7 @@ export default function Login() {
                     </div>
                     <div>
                         <Input
-                            label='Email'
+                            label='User ID'
                             name='email'
                             onChange={(e) => {
                                 action.setForm({
@@ -29,7 +29,7 @@ export default function Login() {
                             }}
                             type='text'
                             value={state.form.email}
-                            error={state.form.email === '' ? 'Email tidak boleh kosong' : ''}
+                            error={state.form.email === '' ? 'User ID tidak boleh kosong' : ''}
                             required
                         />
                         <Input
