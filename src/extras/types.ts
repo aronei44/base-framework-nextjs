@@ -1,3 +1,5 @@
+import { User } from "@/data/types";
+
 type AllPrimitiveType = string | number | boolean | null | undefined | void | object;
 export type AllType = AllPrimitiveType | Record<string, AllPrimitiveType> | Array<AllPrimitiveType>;
 
@@ -36,4 +38,22 @@ export type RedisType = {
     port?: number,
     password?: string,
     db?: number
+}
+
+
+// authcontext.tsx
+export type LoginData = {
+    email: string;
+    password: string;
+}
+export type AuthContextType = {
+    state: {
+        form: LoginData;
+        user: User | null;
+    };
+    action: {
+        Login: (props: LoginData) => Promise<void>;
+        Logout: () => Promise<void>;
+        setForm: (data: LoginData) => void;
+    };
 }

@@ -112,6 +112,29 @@ const checkSession = async () => {
         data: {
             success: boolean;
             message: string;
+            data?: User;
+        },
+        error: boolean;
+        tracer: number;
+    }
+}
+
+const logout = async () => {
+    return await safecall({
+        name: 'logout',
+        fn: async (tracer) => {
+            const session = await getCookies('session', tracer);
+            if (session.error) {
+                return {success: false, message: 'No session found'};
+            }
+            await (await redis(securityRedisOptions)).del(session.data);
+            await removeCookies('session', tracer);
+            return {success: true, message: 'Session deleted'};
+        }
+    }) as {
+        data: {
+            success: boolean;
+            message: string;
         },
         error: boolean;
         tracer: number;
@@ -121,5 +144,6 @@ const checkSession = async () => {
 export {
     login,
     register,
-    checkSession
+    checkSession,
+    logout
 }
