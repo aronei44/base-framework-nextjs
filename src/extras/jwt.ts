@@ -12,7 +12,10 @@ export const encrypt = async (data: Record<string, AllType>, tracer?: number) =>
         name: 'encrypt',
         tracer,
         fn: async () => {
-            return jwt.sign(data, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRE });
+            // remove iat and exp from jwt
+            const { iat, exp, ...payload } = data;
+            console.log(`last iat: ${iat}, last exp: ${exp}`); // just for use the variables
+            return jwt.sign(payload, config.JWT_SECRET, { expiresIn: parseInt(config.JWT_EXPIRE) });
         }
     }) as { data: string, tracer: number, error: boolean };
 }

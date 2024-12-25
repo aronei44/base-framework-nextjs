@@ -8,6 +8,13 @@ const getConfig = async () => {
         REDIS_PORT: process.env.REDIS_PORT ?? '6379',
         REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
         REDIS_DB: process.env.REDIS_DB ?? '0',
+        DB_NAME: process.env.DB_NAME ?? 'mydb',
+        DB_USER: process.env.DB_USER ?? 'postgres',
+        DB_PASSWORD: process.env.DB_PASSWORD ?? 'postgres',
+        DB_HOST: process.env.DB_HOST ?? 'localhost',
+        DB_PORT: process.env.DB_PORT ?? '5432',
+        DB_DIALECT: process.env.DB_DIALECT ?? 'postgres',
+        SESSION_TIMEOUT: process.env.SESSION_TIMEOUT ?? '1800'
     }
 }
 

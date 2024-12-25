@@ -6,7 +6,7 @@ export type AllType = AllPrimitiveType | Record<string, AllPrimitiveType> | Arra
 export type SafeCall = {
     name?: string;
     tracer?: number;
-    fn: () => Promise<AllType | void>;
+    fn: (tracer?: number) => Promise<AllType | void>;
 }
 
 export type SafeCallFunction = (data: SafeCall) => Promise<{ data: AllType; tracer: number; error: boolean }>;
@@ -32,8 +32,8 @@ export type CallApiFunction = (data: CallApi) => Promise<{ data: AllType; tracer
 
 // redis.ts
 export type RedisType = {
-    host: string,
-    port: number,
-    password: string,
-    db: number
+    host?: string,
+    port?: number,
+    password?: string,
+    db?: number
 }

@@ -7,7 +7,7 @@ const safecall : SafeCallFunction = async ({name, tracer, fn}) => {
     let success = true;
     let error: Error | null = null;
     try {
-        result = await fn();
+        result = await fn(tracer ?? startTimer);
     } catch (e) {
         success = false;
         error = e as Error;
