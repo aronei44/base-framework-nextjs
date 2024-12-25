@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useCallback, useContext, useState, useEffect } from "react";
 import { login, logout, checkSession } from "@/extras/security";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { User, Application } from "@/data/types";
 import { AuthContextType, LoginData } from "./types";
@@ -15,7 +15,8 @@ export const AuthContext = createContext<AuthContextType>({
       password: ''
     },
     user: null,
-    application: []
+    application: [],
+    activeApp: ''
   },
   action: {
     Login: async (props: LoginData) => {
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }: {
   const pathname = usePathname();
   const router = useRouter();
   const alert = useAlert();
+  const param = useParams();
 
   const [user, setUser] = useState<null | User>(null);
   const [form, setForm] = useState<LoginData>({
@@ -45,6 +47,7 @@ export const AuthProvider = ({ children }: {
     password: ''
   });
   const [application, setApplication] = useState<Application[]>([]);
+  const [activeApp, setActiveApp] = useState<string>('');
 
   const Login = useCallback(async (props: LoginData) => {
       const { data } = await login(props.email, props.password);
@@ -122,12 +125,26 @@ export const AuthProvider = ({ children }: {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (param.application) {
+      const app = application.find((app) => app.prefix === param.application);
+      if (app) {
+        setActiveApp(app.app_name);
+      } else {
+        setActiveApp('');
+      }
+    } else {
+      setActiveApp('');
+    }
+  }, [param, application, router]);
+
   const value = useCallback(()=> {
     return {
       state: {
         form,
         user,
-        application
+        application,
+        activeApp
       },
       action: {
         Login,
@@ -135,7 +152,7 @@ export const AuthProvider = ({ children }: {
         setForm
       }
     }
-  }, [form, user, Login, Logout, application]);
+  }, [form, user, Login, Logout, application, activeApp]);
 
   return (
     <AuthContext.Provider value={value()}>

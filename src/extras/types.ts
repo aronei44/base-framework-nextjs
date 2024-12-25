@@ -52,6 +52,7 @@ export type AuthContextType = {
         form: LoginData;
         user: User | null;
         application: Application[];
+        activeApp: string;
     };
     action: {
         Login: (props: LoginData) => Promise<void>;
