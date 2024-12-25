@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { User } from "@/data/types";
 import { AuthContextType, LoginData } from "./types";
+import { useAlert } from "./alertcontext";
 
 export const AuthContext = createContext<AuthContextType>({
   state: {
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }: {
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const alert = useAlert();
 
   const [user, setUser] = useState<null | User>(null);
   const [form, setForm] = useState<LoginData>({
@@ -41,31 +43,49 @@ export const AuthProvider = ({ children }: {
     password: ''
   });
 
-  const Login = async (props: LoginData) => {
-    const { data } = await login(props.email, props.password);
-    if (data.success) {
-      if (typeof window !== 'undefined') {
-        window.location.reload();
+  const Login = useCallback(async (props: LoginData) => {
+      const { data } = await login(props.email, props.password);
+      if (data.success) {
+        if (typeof window !== 'undefined') {
+          alert.toast.success('Login success', 'Success', {
+            timeOut: 1000,
+            positionClass: 'toast-top-right',
+            onHidden() {
+              window.location.reload();
+            },
+          });
+        }
+        setForm({
+          email: '',
+          password: ''
+        });
+      } else {
+        alert.toast.error(data.message, 'Error', {
+          timeOut: 1000,
+          positionClass: 'toast-top-right'
+        });
       }
-    } else {
-      alert(data.message);
-    }
-    setForm({
-      email: '',
-      password: ''
-    });
-  }
+    }, [alert]);
 
-  const Logout = async () => {
+  const Logout = useCallback(async () => {
     const { data } = await logout();
     if (data.success) {
       if (typeof window !== 'undefined') {
-        window.location.reload();
+        alert.toast.success('Logout success', 'Success', {
+          timeOut: 500,
+          positionClass: 'toast-top-right',
+          onHidden() {
+            window.location.reload();
+          },
+        });
       }
     } else {
-      alert(data.message);
+      alert.toast.error(data.message, 'Error', {
+        timeOut: 1000,
+        positionClass: 'toast-top-right'
+      });
     }
-  };
+  }, [alert]);
 
   const CheckAccess = async (pathname: string, router: AppRouterInstance) => {
     const { data } = await checkSession();
@@ -98,7 +118,7 @@ export const AuthProvider = ({ children }: {
         setForm
       }
     }
-  }, [form, user]);
+  }, [form, user, Login, Logout]);
 
   return (
     <AuthContext.Provider value={value()}>

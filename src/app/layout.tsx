@@ -1,8 +1,9 @@
 'use client';
 import localFont from "next/font/local";
 import "./globals.css";
-
+import "toastr/build/toastr.min.css";
 import AuthProvider from "../extras/authcontext";
+import AlertProvider from "@/extras/alertcontext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,13 +35,16 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
+        <link href="toastr.css" rel="stylesheet" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AlertProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </AlertProvider>
       </body>
     </html>
   );

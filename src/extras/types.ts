@@ -1,4 +1,5 @@
 import { User } from "@/data/types";
+import Swal from "sweetalert2";
 
 type AllPrimitiveType = string | number | boolean | null | undefined | void | object;
 export type AllType = AllPrimitiveType | Record<string, AllPrimitiveType> | Array<AllPrimitiveType>;
@@ -56,4 +57,10 @@ export type AuthContextType = {
         Logout: () => Promise<void>;
         setForm: (data: LoginData) => void;
     };
+}
+
+// alertcontext.tsx
+export type AlertContextType = {
+    swal: typeof Swal;
+    toast: Toastr;
 }
