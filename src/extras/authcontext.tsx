@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }: {
   });
   const [application, setApplication] = useState<Application[]>([]);
   const [activeApp, setActiveApp] = useState<string>('');
+  const [appLoading, setAppLoading] = useState<boolean>(false);
 
   const Login = useCallback(async (props: LoginData) => {
       const { data } = await login(props.email, props.password);
@@ -94,8 +95,10 @@ export const AuthProvider = ({ children }: {
   }, [alert]);
 
   const getApplications = async (role_id: string) => {
+    setAppLoading(true);
     const apps = await getApplication(role_id);
     setApplication(apps);
+    setAppLoading(false);
   }
 
   const CheckAccess = async (pathname: string, router: AppRouterInstance) => {
@@ -126,17 +129,23 @@ export const AuthProvider = ({ children }: {
   }, [user]);
 
   useEffect(() => {
-    if (param.application) {
+    if (param.application && !appLoading && application.length > 0) {
       const app = application.find((app) => app.prefix === param.application);
       if (app) {
         setActiveApp(app.app_name);
       } else {
-        setActiveApp('');
+        alert.swal.fire({
+          title: '403 Forbidden',
+          text: 'Application not available for your role',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
+        router.push('/');
       }
     } else {
       setActiveApp('');
     }
-  }, [param, application, router]);
+  }, [param, application, router, alert, appLoading]);
 
   const value = useCallback(()=> {
     return {
