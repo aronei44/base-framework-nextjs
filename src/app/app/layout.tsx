@@ -11,8 +11,8 @@ const LayoutDashboard = ({ children }: {
     const { state, action } = auth;
     const [showDropdown, setShowDropdown] = useState(false);
     return (
-        <div className="grid grid-cols-5" onClick={() => setShowDropdown(false)}>
-            <div className="col-span-1 bg-white h-screen border-r border-gray-200">
+        <div className="grid grid-cols-5 max-h-screen overflow-hidden" onClick={() => setShowDropdown(false)}>
+            <div className="col-span-1 bg-white max-h-screen border-r border-gray-200 overflow-auto">
                 <div className="bg-white shadow-md p-4 absolute top-0 w-full flex justify-between items-center h-16">
                 </div>
                 <LayoutSidebar menu={state.menu || []} prefix={`/app/${state.param.application}`} />
@@ -29,7 +29,7 @@ const LayoutDashboard = ({ children }: {
                         setShowDropdown={setShowDropdown}
                     />
                 </div>
-                <div className="mt-16 p-4">
+                <div className="mt-16 p-4 max-h-[85%] overflow-auto">
                     {children}
                 </div>
             </div>

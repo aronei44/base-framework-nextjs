@@ -16,7 +16,7 @@ const Dropdown = (props: DropdownProps) => {
                 {props.user?.name} | {props.user?.role?.role_name}
             </h4>
             {props.showDropdown && (
-                <div className="absolute top-10 right-0 bg-white py-4 px-8 rounded-lg min-w-64 border border-gray-300">
+                <div className="absolute top-10 right-0 bg-white py-4 px-8 rounded-lg min-w-64 border border-gray-300 z-[999]">
                     {props.application.map((app, index) => {
                         return (
                             <Link

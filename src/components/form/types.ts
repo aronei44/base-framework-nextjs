@@ -1,3 +1,5 @@
+import { MouseEventHandler } from "react";
+
 export type DefaultFormProps = {
     name: string;
     value: string;
@@ -21,7 +23,7 @@ export type LabelProps = {
 
 export type ButtonProps = {
     label: string;
-    onClick: () => void;
+    onClick: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     loading?: boolean;
     color?: 'blue' | 'red' | 'green' | 'yellow' | 'gray';

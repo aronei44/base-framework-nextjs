@@ -37,7 +37,7 @@ const Sidebar = (props: SidebarProps) => {
     return (
         <MenuRC
             mode="inline"
-            className="p-4 mt-16 overflow-auto"
+            className="p-4 mt-16 overflow-auto max-h-[85%]"
             id="sidebar"
         >
             <MenuBar menu={props.menu} prefix={props.prefix} />

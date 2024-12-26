@@ -3,6 +3,7 @@ export type DBPagination = {
     page?: number;
 }
 
+export type DBFilter = Record<string, string | number | boolean>;
 
 export type User = {
     username: string;

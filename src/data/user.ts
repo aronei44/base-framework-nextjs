@@ -1,5 +1,6 @@
+'use server';
 import dbconn from "./connection";
-import { DBPagination, User } from "./types";
+import { DBFilter, DBPagination, User } from "./types";
 import { z } from "zod";
 
 
@@ -15,7 +16,7 @@ const UserUpdateSchema = z.object({
     name: z.string().min(1),
 });
 
-const getUsers = async (pagination?: DBPagination, tracer?: number) => {
+const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => {
     const limit = pagination?.limit ?? 10;
     const page = pagination?.page ?? 1;
     const offset = (page - 1) * limit;
