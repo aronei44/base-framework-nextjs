@@ -22,3 +22,14 @@ export type Application = {
     prefix: string;
     is_active: boolean;
 }
+
+export type Menu = {
+    menu_id: string;
+    menu_name: string;
+    app_id: string;
+    url: string;
+    parent_id?: string;
+    is_active: boolean;
+    menu_order: number;
+    childs?: Menu[];
+}

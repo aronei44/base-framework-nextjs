@@ -3,10 +3,10 @@ import { createContext, useCallback, useContext, useState, useEffect } from "rea
 import { login, logout, checkSession } from "@/extras/security";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { User, Application } from "@/data/types";
+import { User, Application, Menu } from "@/data/types";
 import { AuthContextType, LoginData } from "./types";
 import { useAlert } from "./alertcontext";
-import { getApplication } from "@/data/access";
+import { getApplication, getMenu } from "@/data/access";
 
 export const AuthContext = createContext<AuthContextType>({
   state: {
@@ -16,7 +16,9 @@ export const AuthContext = createContext<AuthContextType>({
     },
     user: null,
     application: [],
-    activeApp: ''
+    activeApp: '',
+    menu: [],
+    param: {}
   },
   action: {
     Login: async (props: LoginData) => {
@@ -47,8 +49,15 @@ export const AuthProvider = ({ children }: {
     password: ''
   });
   const [application, setApplication] = useState<Application[]>([]);
+  const [menu, setMenu] = useState<Menu[]>([]);
   const [activeApp, setActiveApp] = useState<string>('');
-  const [appLoading, setAppLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<{
+    application: boolean;
+    menu: boolean;
+  }>({
+    application: false,
+    menu: false
+  });
 
   const Login = useCallback(async (props: LoginData) => {
       const { data } = await login(props.email, props.password);
@@ -95,10 +104,29 @@ export const AuthProvider = ({ children }: {
   }, [alert]);
 
   const getApplications = async (role_id: string) => {
-    setAppLoading(true);
+    setLoading(prev => ({
+      ...prev,
+      application: true
+    }));
     const apps = await getApplication(role_id);
     setApplication(apps);
-    setAppLoading(false);
+    setLoading(prev => ({
+      ...prev,
+      application: false
+    }));
+  }
+
+  const getMenuList = async (role_id: string, app_id: string) => {
+    setLoading(prev => ({
+      ...prev,
+      menu: true
+    }));
+    const menus = await getMenu(role_id, app_id);
+    setMenu(menus);
+    setLoading(prev => ({
+      ...prev,
+      menu: false
+    }));
   }
 
   const CheckAccess = async (pathname: string, router: AppRouterInstance) => {
@@ -129,10 +157,11 @@ export const AuthProvider = ({ children }: {
   }, [user]);
 
   useEffect(() => {
-    if (param.application && !appLoading && application.length > 0) {
+    if (param.application && !loading.application && application.length > 0) {
       const app = application.find((app) => app.prefix === param.application);
       if (app) {
         setActiveApp(app.app_name);
+        setMenu([]);
       } else {
         alert.swal.fire({
           title: '403 Forbidden',
@@ -145,7 +174,14 @@ export const AuthProvider = ({ children }: {
     } else {
       setActiveApp('');
     }
-  }, [param, application, router, alert, appLoading]);
+  }, [param, application, router, alert, loading.application]);
+
+  useEffect(() => {
+    if (user?.role && !loading.menu && param.application && menu.length === 0) {
+      getMenuList(user.role.role_id, param.application as string);
+    }
+  }, [user, param, loading.menu, menu]);
+
 
   const value = useCallback(()=> {
     return {
@@ -153,7 +189,9 @@ export const AuthProvider = ({ children }: {
         form,
         user,
         application,
-        activeApp
+        activeApp,
+        menu,
+        param
       },
       action: {
         Login,
@@ -161,7 +199,7 @@ export const AuthProvider = ({ children }: {
         setForm
       }
     }
-  }, [form, user, Login, Logout, application, activeApp]);
+  }, [form, user, Login, Logout, application, activeApp, menu, param]);
 
   return (
     <AuthContext.Provider value={value()}>

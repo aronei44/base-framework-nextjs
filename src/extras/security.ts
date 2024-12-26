@@ -101,7 +101,7 @@ const checkSession = async () => {
                 return {success: false, message: 'Invalid session'};
             } else {
                 const newdata = await encrypt(user.data, tracer);
-                await (await redis()).set(session.data, newdata.data, 'EX', parseInt(config.SESSION_TIMEOUT));
+                await (await redis(securityRedisOptions)).set(session.data, newdata.data, 'EX', parseInt(config.SESSION_TIMEOUT));
                 await setCookies('session', session.data, tracer);
                 return {success: true, message: 'Session valid', data: user.data};
             }

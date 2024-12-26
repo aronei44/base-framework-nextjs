@@ -1,15 +1,7 @@
 'use client';
-import { Application, User } from "@/data/types";
 import Link from "next/link";
+import { DropdownProps } from "./types";
 
-type DropdownProps = {
-    user: User;
-    application: Application[];
-    activeApp: string;
-    Logout: () => void;
-    showDropdown: boolean;
-    setShowDropdown: (show: boolean) => void;
-}
 
 const Dropdown = (props: DropdownProps) => {
     return (

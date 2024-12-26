@@ -1,4 +1,5 @@
-import { Application, User } from "@/data/types";
+import { Application, Menu, User } from "@/data/types";
+import { Params } from "next/dist/server/request/params";
 import Swal from "sweetalert2";
 
 type AllPrimitiveType = string | number | boolean | null | undefined | void | object;
@@ -53,6 +54,8 @@ export type AuthContextType = {
         user: User | null;
         application: Application[];
         activeApp: string;
+        menu: Menu[];
+        param: Params;
     };
     action: {
         Login: (props: LoginData) => Promise<void>;
