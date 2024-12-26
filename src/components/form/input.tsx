@@ -27,6 +27,7 @@ const Input = (props: InputProps & DefaultFormProps) => {
                 value={props.value || ''}
                 onChange={props.onChange}
                 name={props.name}
+                disabled={props.disabled}
             />
             {props.error && <p className="text-red-500 text-sm mt-1">{props.error}</p>}
             {props.type === 'password' && (

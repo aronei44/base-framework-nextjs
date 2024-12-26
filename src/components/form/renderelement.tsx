@@ -62,9 +62,7 @@ const RenderElement = (props: RenderElementProps) => {
         }
     }
 
-    if (props.globalDisabled) {
-        unable = props.globalDisabled || unable;
-    }
+    unable = props.globalDisabled || unable;
 
     let hide = false;
     if (props.hidden !== undefined) {
