@@ -6,12 +6,15 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { DBFilter, DBPagination } from "@/data/types";
 import Modal from "./modal";
 import Header from "./header";
+import { FormBuilderProps } from "../form/types";
+import { RenderForm } from "../form";
 
 type LayoutProps = {
     getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<Record<string, AllType>[]>
     title: string
     columns: TableColumn<Record<string, unknown>>[]
     addState?: string
+    filter?: FormBuilderProps
 }
 
 const Layout = (props: LayoutProps) => {
@@ -23,11 +26,22 @@ const Layout = (props: LayoutProps) => {
     }>({
         title: ""
     });
+    const [showFilter, setShowFilter] = useState<boolean>(false);
 
     const getData = useCallback(async () => {
-        const dataDB = await props.getData(pagination);
+        const filter = props.filter?.fields?.data ?? {};
+        const dataDB = await props.getData(pagination, filter as unknown as DBFilter);
         setData(dataDB);
     }, [props, pagination]);
+
+    const resetFilter = () => {
+        setPagination({ limit: 10, page: 1 });
+        props.filter?.setFields({
+            data: {},
+            errors: {},
+        })
+        getData();
+    }
 
     useEffect(() => {
         getData();
@@ -40,7 +54,33 @@ const Layout = (props: LayoutProps) => {
             <Header
                 title={props.title}
             />
-            <div className="p-2 shadow-md rounded-md border-t border-t-gray-200">
+
+            {props.filter && (
+                <div className="p-2 shadow-md rounded-md border-t border-t-gray-200 mt-16">
+                    <div
+                        className="flex justify-between mb-2 text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
+                        onClick={() => setShowFilter(!showFilter)}
+                    >
+                        <p>Filter:</p>
+                        <p
+                            onClick={(e)=> {
+                                e.stopPropagation();
+                                resetFilter();
+                            }}
+                        >
+                            Reset Filter
+                        </p>
+                    </div>
+                    <hr />
+                    {showFilter && (
+                        <RenderForm
+                            {...props.filter}
+                        />
+                    )}
+                </div>
+            )}
+
+            <div className="p-2 shadow-md rounded-md border-t border-t-gray-200 mt-16">
                 <DataTable
                     columns={props.columns}
                     data={data}

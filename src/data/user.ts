@@ -20,7 +20,7 @@ const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
     const limit = pagination?.limit ?? 10;
     const page = pagination?.page ?? 1;
     const offset = (page - 1) * limit;
-    const query = `
+    let query = `
         SELECT
             u.username,
             u.name,
@@ -34,8 +34,13 @@ const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
             roles r
         ON
             u.role = r.role_id
-        LIMIT ${limit} OFFSET ${offset}
     `
+
+    if (filter?.username) {
+        query += `WHERE u.username LIKE '%${filter.username}%'`
+    }
+
+    query += `LIMIT ${limit} OFFSET ${offset}`
     const {data, error} = await dbconn(query, tracer);
     if (error) {
         return [];

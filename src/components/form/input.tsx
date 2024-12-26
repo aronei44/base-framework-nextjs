@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Label from "./label";
-import { InputProps } from "./types";
+import { DefaultFormProps, InputProps } from "./types";
 
 const className = (error?: string) => {
     const defaultStyle = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5';
@@ -10,7 +10,7 @@ const className = (error?: string) => {
     return defaultStyle;
 }
 
-const Input = (props: InputProps) => {
+const Input = (props: InputProps & DefaultFormProps) => {
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     return (
         <div className="mb-5">
@@ -26,6 +26,7 @@ const Input = (props: InputProps) => {
                 placeholder={props.placeholder}
                 value={props.value || ''}
                 onChange={props.onChange}
+                name={props.name}
             />
             {props.error && <p className="text-red-500 text-sm mt-1">{props.error}</p>}
             {props.type === 'password' && (

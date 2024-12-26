@@ -1,5 +1,7 @@
+'use client';
 import { TableColumn } from "react-data-table-component";
 import { User } from "@/data/types";
+import { MetadataProps } from "@/components/form/types";
 
 const columns: TableColumn<Record<string, unknown>>[] = [
     {
@@ -19,4 +21,16 @@ const columns: TableColumn<Record<string, unknown>>[] = [
     },
 ]
 
-export { columns };
+const metadata : MetadataProps = [
+    {
+        name: 'username',
+        type: 'text',
+        setup: {
+            type: 'text',
+            label: 'Username',
+            placeholder: 'Username',
+        }
+    }
+]
+
+export { columns, metadata };
