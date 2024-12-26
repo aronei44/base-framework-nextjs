@@ -8,6 +8,7 @@ import Modal from "./modal";
 import Header from "./header";
 import { FormBuilderProps } from "../form/types";
 import { RenderForm } from "../form";
+import Loading from "./loading";
 
 type LayoutProps = {
     getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<Record<string, AllType>[]>
@@ -27,11 +28,14 @@ const Layout = (props: LayoutProps) => {
         title: ""
     });
     const [showFilter, setShowFilter] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const getData = useCallback(async () => {
+        setLoading(true);
         const filter = props.filter?.fields?.data ?? {};
         const dataDB = await props.getData(pagination, filter as unknown as DBFilter);
         setData(dataDB);
+        setLoading(false);
     }, [props, pagination]);
 
     const resetFilter = () => {
@@ -105,6 +109,8 @@ const Layout = (props: LayoutProps) => {
                             }}
                         />
                     }
+                    progressPending={loading}
+                    progressComponent={<Loading />}
                 />
             </div>
             <Modal 
