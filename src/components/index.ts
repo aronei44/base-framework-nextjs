@@ -1,2 +1,2 @@
-export * from './small';
+export * from './form';
 export * from './dashboard';
