@@ -29,7 +29,7 @@ const LayoutDashboard = ({ children }: {
                         setShowDropdown={setShowDropdown}
                     />
                 </div>
-                <div className="mt-16 p-4 max-h-[85%] overflow-auto">
+                <div className="mt-16 p-4 max-h-[75%] overflow-auto">
                     {children}
                 </div>
             </div>

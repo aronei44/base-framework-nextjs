@@ -11,7 +11,7 @@ import { RenderForm } from "../form";
 import Loading from "./loading";
 
 type LayoutProps = {
-    getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<Record<string, AllType>[]>
+    getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<{data: Record<string, AllType>[], total: number}>
     title: string
     columns: TableColumn<Record<string, unknown>>[]
     addState?: string
@@ -29,14 +29,21 @@ const Layout = (props: LayoutProps) => {
     });
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [totalData, setTotalData] = useState<number>(0);
 
-    const getData = useCallback(async () => {
+    const getData = useCallback(async (pagination: DBPagination, filter: DBFilter = {}) => {
         setLoading(true);
-        const filter = props.filter?.fields?.data ?? {};
-        const dataDB = await props.getData(pagination, filter as unknown as DBFilter);
+        setPagination(pagination);
+        const {data: dataDB, total} = await props.getData(pagination, filter);
         setData(dataDB);
-        setLoading(false);
-    }, [props, pagination]);
+        setTotalData(total);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        if ((pagination?.page || 0) > 1 && dataDB.length === 0) {
+            getData({ ...pagination, page: 1 }, filter);
+        }
+    }, [props]);
 
     const resetFilter = () => {
         setPagination({ limit: 10, page: 1 });
@@ -44,12 +51,14 @@ const Layout = (props: LayoutProps) => {
             data: {},
             errors: {},
         })
-        getData();
+        getData({
+            limit: 10,
+            page: 1
+        });
     }
-
     useEffect(() => {
-        getData();
-    }, [getData]);
+        getData(pagination, props.filter?.fields.data as unknown as DBFilter);
+    }, []);
     return (
         <div 
             className= "bg-white p-4 min-h-fit rounded-md shadow-lg" 
@@ -92,11 +101,16 @@ const Layout = (props: LayoutProps) => {
                     paginationServer={true}
                     pagination={true}
                     onChangePage={(page) => {
-                        setPagination({ ...pagination, page: page });
+                        if (!loading) {
+                            getData({ ...pagination, page: page }, props.filter?.fields.data as unknown as DBFilter);
+                        }
                     }}
                     onChangeRowsPerPage={(currentRowsPerPage) => {
-                        setPagination({ ...pagination, limit: currentRowsPerPage });
+                        if (!loading) {
+                            getData({ ...pagination, limit: currentRowsPerPage }, props.filter?.fields.data as unknown as DBFilter);
+                        }
                     }}
+                    paginationTotalRows={totalData}
                     actions={
                         props.addState && <Button 
                             key={1}

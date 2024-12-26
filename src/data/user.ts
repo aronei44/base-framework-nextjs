@@ -43,9 +43,25 @@ const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
     query += `LIMIT ${limit} OFFSET ${offset}`
     const {data, error} = await dbconn(query, tracer);
     if (error) {
-        return [];
+        return {
+            data: [],
+            total: 0
+        }
     }
-    return data as User[];
+
+    query = `SELECT COUNT(*) as total FROM users u`;
+    const {data: dataTotal, error: errorTotal} = await dbconn(query, tracer);
+    if (errorTotal) {
+        return {
+            data: data as User[],
+            total: data.length
+        }
+    }
+
+    return {
+        data: data as User[],
+        total: (dataTotal[0] as {total: number}).total
+    }
 }
 
 const getUserById = async (username: string, tracer?: number) => {
