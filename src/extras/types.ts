@@ -54,13 +54,18 @@ export type AuthContextType = {
         user: User | null;
         application: Application[];
         activeApp: string;
-        menu: Menu[];
         param: Params;
     };
     action: {
         Login: (props: LoginData) => Promise<void>;
         Logout: () => Promise<void>;
         setForm: (data: LoginData) => void;
+    };
+}
+
+export type MenuContextType = {
+    state: {
+        menu: Menu[];
     };
 }
 

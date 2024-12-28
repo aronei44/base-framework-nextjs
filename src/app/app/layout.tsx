@@ -3,19 +3,21 @@ import { User } from "@/data/types";
 import { useAuth } from "@/extras/authcontext";
 import { useState } from "react";
 import {LayoutDropdown, LayoutSidebar} from "@/components";
+import { useMenu } from "@/extras/menucontext";
 
 const LayoutDashboard = ({ children }: {
     children: React.ReactNode;
 }) => {
     const auth = useAuth();
     const { state, action } = auth;
+    const menu = useMenu();
     const [showDropdown, setShowDropdown] = useState(false);
     return (
         <div className="grid grid-cols-5 max-h-screen overflow-hidden" onClick={() => setShowDropdown(false)}>
             <div className="col-span-1 bg-white max-h-screen border-r border-gray-200 overflow-auto">
                 <div className="bg-white shadow-md p-4 absolute top-0 w-full flex justify-between items-center h-16">
                 </div>
-                <LayoutSidebar menu={state.menu || []} prefix={`/app/${state.param.application}`} />
+                <LayoutSidebar menu={menu.state.menu || []} prefix={`/app/${state.param.application}`} />
             </div>
             <div id="content" className="col-span-4 bg-gray-200 min-h-screen overflow-auto relative">
                 <div className="bg-white shadow-md p-4 absolute top-0 w-full flex justify-between items-center h-16">

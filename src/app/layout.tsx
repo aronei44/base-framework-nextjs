@@ -4,6 +4,7 @@ import "./globals.css";
 import "toastr/build/toastr.min.css";
 import AuthProvider from "../extras/authcontext";
 import AlertProvider from "@/extras/alertcontext";
+import MenuProvider from "@/extras/menucontext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,7 +42,9 @@ export default function RootLayout({
       >
         <AlertProvider>
           <AuthProvider>
-            {children}
+            <MenuProvider>
+              {children}
+            </MenuProvider>
           </AuthProvider>
         </AlertProvider>
       </body>

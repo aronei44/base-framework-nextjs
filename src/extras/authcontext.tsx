@@ -3,10 +3,10 @@ import { createContext, useCallback, useContext, useState, useEffect } from "rea
 import { login, logout, checkSession } from "@/extras/security";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { User, Application, Menu } from "@/data/types";
+import { User, Application } from "@/data/types";
 import { AuthContextType, LoginData } from "./types";
 import { useAlert } from "./alertcontext";
-import { getApplication, getMenu } from "@/data/access";
+import { getApplication } from "@/data/access";
 
 export const AuthContext = createContext<AuthContextType>({
   state: {
@@ -17,7 +17,6 @@ export const AuthContext = createContext<AuthContextType>({
     user: null,
     application: [],
     activeApp: '',
-    menu: [],
     param: {}
   },
   action: {
@@ -49,7 +48,6 @@ export const AuthProvider = ({ children }: {
     password: ''
   });
   const [application, setApplication] = useState<Application[]>([]);
-  const [menu, setMenu] = useState<Menu[]>([]);
   const [activeApp, setActiveApp] = useState<string>('');
   const [loading, setLoading] = useState<{
     application: boolean;
@@ -116,19 +114,6 @@ export const AuthProvider = ({ children }: {
     }));
   }
 
-  const getMenuList = async (role_id: string, app_id: string) => {
-    setLoading(prev => ({
-      ...prev,
-      menu: true
-    }));
-    const menus = await getMenu(role_id, app_id);
-    setMenu(menus);
-    setLoading(prev => ({
-      ...prev,
-      menu: false
-    }));
-  }
-
   const CheckAccess = async (pathname: string, router: AppRouterInstance) => {
     const { data } = await checkSession();
     if (data.success) {
@@ -161,7 +146,6 @@ export const AuthProvider = ({ children }: {
       const app = application.find((app) => app.prefix === param.application);
       if (app) {
         setActiveApp(app.app_name);
-        setMenu([]);
       } else {
         alert.swal.fire({
           title: '403 Forbidden',
@@ -176,12 +160,6 @@ export const AuthProvider = ({ children }: {
     }
   }, [param, application, router, alert, loading.application]);
 
-  useEffect(() => {
-    if (user?.role && !loading.menu && param.application && menu.length === 0) {
-      getMenuList(user.role.role_id, param.application as string);
-    }
-  }, [user, param, loading.menu, menu]);
-
 
   const value = useCallback(()=> {
     return {
@@ -190,7 +168,6 @@ export const AuthProvider = ({ children }: {
         user,
         application,
         activeApp,
-        menu,
         param
       },
       action: {
@@ -199,7 +176,7 @@ export const AuthProvider = ({ children }: {
         setForm
       }
     }
-  }, [form, user, Login, Logout, application, activeApp, menu, param]);
+  }, [form, user, Login, Logout, application, activeApp, param]);
 
   return (
     <AuthContext.Provider value={value()}>
