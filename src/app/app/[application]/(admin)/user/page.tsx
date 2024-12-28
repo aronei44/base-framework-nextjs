@@ -4,17 +4,12 @@ import { getUsers, getUser } from "@/data/user";
 import { columns, filterMetadata, metadata } from "./metadata";
 import { Fields } from "@/components/form/types";
 import { useState } from "react";
+import defaultFields from "@/extras/defaultfields";
 
 const User = () => {
-    const [fields, setFields] = useState<Fields>({
-        data: {},
-        errors: {}
-    })
+    const [fields, setFields] = useState<Fields>(defaultFields)
 
-    const [filter, setFilter] = useState<Fields>({
-        data: {},
-        errors: {}
-    })
+    const [filter, setFilter] = useState<Fields>(defaultFields)
     return (
         <Layout
             columns={columns}

@@ -12,6 +12,7 @@ import { useAlert } from "@/extras/alertcontext";
 import { getMenuAction } from "@/data/actionbutton";
 import { LayoutProps } from "./types";
 import ActionCell from "./actioncell";
+import defaultFields from "@/extras/defaultfields";
 
 
 const Layout = (props: LayoutProps) => {
@@ -53,17 +54,14 @@ const Layout = (props: LayoutProps) => {
 
     const resetFilter = () => {
         setPagination({ limit: 10, page: 1 });
-        props.filter?.setFields({
-            data: {},
-            errors: {},
-        })
+        props.filter?.setFields(defaultFields)
         getData({
             limit: 10,
             page: 1
         });
     }
     const submitForm = (data: ActionButton) => {
-        let fields = props.form?.fields ?? { data: {}, errors: {} }
+        let fields = props.form?.fields ?? defaultFields;
         if (props.form?.onBeforeSubmit) {
             fields = props.form?.onBeforeSubmit(fields)
         }
@@ -238,10 +236,7 @@ const Layout = (props: LayoutProps) => {
             {modalState.show && props.form && (
                 <Modal 
                     setOpen={(e)=> {
-                        props.form?.setFields({
-                            data: {},
-                            errors: {}
-                        });
+                        props.form?.setFields(defaultFields);
                         setModalState({ ...modalState, show: e })
                     }}    
                     title={modalState.title}
