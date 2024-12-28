@@ -6,7 +6,7 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { DBFilter, DBPagination } from "@/data/types";
 import Modal from "./formmodal";
 import Header from "./header";
-import { FormBuilderProps } from "../form/types";
+import { MetadataBuilderProps } from "../form/types";
 import { RenderForm } from "../form";
 import Loading from "./loading";
 import { useAlert } from "@/extras/alertcontext";
@@ -16,21 +16,27 @@ type LayoutProps = {
     title: string
     columns: TableColumn<Record<string, unknown>>[]
     addState?: string
-    filter?: FormBuilderProps
+    filter?: MetadataBuilderProps
     form?: {
         getData: (data: Record<string, AllType>) => Promise<Record<string, AllType> | null>
-    } & FormBuilderProps
+    } & MetadataBuilderProps
+    menu_id: string
 }
 
 const Layout = (props: LayoutProps) => {
     const alert = useAlert();
     const [data, setData] = useState<Record<string, AllType>[]>([]);
     const [pagination, setPagination] = useState<DBPagination>({ limit: 10, page: 1 });
-    const [modal, setModal] = useState<boolean>(false);
     const [modalState, setModalState] = useState<{
+        show: boolean;
         title: string;
+        mode: string;
+        state: string;
     }>({
-        title: ""
+        show: false,
+        title: "",
+        mode: "",
+        state: ""
     });
     const [showFilter, setShowFilter] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -79,7 +85,7 @@ const Layout = (props: LayoutProps) => {
                     title: 'Gagal',
                     text: 'Data tidak ditemukan'
                 })
-                setModal(false);
+                setModalState({ ...modalState, show: false });
             }
         }
     }
@@ -91,7 +97,7 @@ const Layout = (props: LayoutProps) => {
     return (
         <div 
             className= "bg-white p-4 min-h-fit rounded-md shadow-lg" 
-            onClick={() => setModal(false)}    
+            onClick={() => setModalState({ ...modalState, show: false })}    
         >
             <Header
                 title={props.title}
@@ -116,6 +122,9 @@ const Layout = (props: LayoutProps) => {
                     <hr />
                     {showFilter && (
                         <RenderForm
+                            menu_id={props.menu_id}
+                            state=""
+                            mode="filter"
                             {...props.filter}
                         />
                     )}
@@ -147,8 +156,12 @@ const Layout = (props: LayoutProps) => {
                             color="green"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setModal(true);
-                                setModalState({ title: `Tambah ${props.addState}` });
+                                setModalState({ 
+                                    title: `Tambah ${props.addState}`,
+                                    show: true,
+                                    mode: "add",
+                                    state: ""
+                                });
                                 getOneData();
                             }}
                         />
@@ -157,11 +170,16 @@ const Layout = (props: LayoutProps) => {
                     progressComponent={<Loading />}
                 />
             </div>
-            {modal && (
+            {modalState.show && props.form && (
                 <Modal 
-                    setOpen={setModal}    
+                    setOpen={(e)=> setModalState({ ...modalState, show: e })}    
                     title={modalState.title}
-                    form={props.form}
+                    form={{
+                        menu_id: props.menu_id,
+                        mode: "add",
+                        state: "",
+                        ...props.form
+                    }}
                 />
             )}
          </div>

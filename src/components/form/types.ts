@@ -137,3 +137,23 @@ export type FormBuilderProps = {
     state: string;
     withButton?: boolean;
 };
+
+export type MetadataBuilderProps = {
+    fields: Fields;
+    setFields: (fields: Fields) => void;
+    disabled?: boolean | ((state: string) => boolean);
+    cols: number;
+    title?: string;
+    subtitle?: string;
+    onBeforeSubmit?: (fields: Fields) => Fields;
+    content: MetadataProps;
+}
+
+export type MinimizeMetadaBuilderProps = {
+    disabled?: boolean | ((state: string) => boolean);
+    cols: number;
+    title?: string;
+    subtitle?: string;
+    onBeforeSubmit?: (fields: Fields) => Fields;
+    content: MetadataProps;
+}

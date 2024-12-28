@@ -15,7 +15,6 @@ const User = () => {
         data: {},
         errors: {}
     })
-    console.log({filter})
     return (
         <Layout
             columns={columns}
@@ -23,23 +22,16 @@ const User = () => {
             title="Pengelolaan User"
             addState="User"
             key="user"
+            menu_id="USERMENU"
             filter={{
-                cols: 3,
-                content: filterMetadata,
+                ...filterMetadata,
                 fields: filter,
                 setFields: setFilter,
-                state: '',
-                menu_id: 'USER',
-                mode: 'filter'
             }}
             form={{
-                cols: 3,
-                content: metadata,
+                ...metadata,
                 fields: fields,
                 setFields: setFields,
-                state: '',
-                menu_id: 'USER',
-                mode: 'filter',
                 getData: getUser
             }}
         />

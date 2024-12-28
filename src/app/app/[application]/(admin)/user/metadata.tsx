@@ -1,7 +1,7 @@
 'use client';
 import { TableColumn } from "react-data-table-component";
 import { User } from "@/data/types";
-import { MetadataProps } from "@/components/form/types";
+import { MinimizeMetadaBuilderProps } from "@/components/form/types";
 
 const columns: TableColumn<Record<string, unknown>>[] = [
     {
@@ -21,50 +21,56 @@ const columns: TableColumn<Record<string, unknown>>[] = [
     },
 ]
 
-const filterMetadata : MetadataProps = [
-    {
-        name: 'username',
-        type: 'text',
-        dataType: 'string',
-        setup: {
+const filterMetadata : MinimizeMetadaBuilderProps = {
+    cols: 3,
+    content: [
+        {
+            name: 'username',
             type: 'text',
-            label: 'Username',
-            placeholder: 'Username',
+            dataType: 'string',
+            setup: {
+                type: 'text',
+                label: 'Username',
+                placeholder: 'Username',
+            }
         }
-    }
-]
+    ]
+}
 
-const metadata : MetadataProps = [
-    {
-        name: 'username',
-        type: 'text',
-        dataType: 'string',
-        setup: {
+const metadata : MinimizeMetadaBuilderProps = {
+    cols: 3,
+    content: [
+        {
+            name: 'username',
             type: 'text',
-            label: 'Username',
-            placeholder: 'Username',
-        }
-    },
-    {
-        name: 'name',
-        type: 'text',
-        dataType: 'string',
-        setup: {
+            dataType: 'string',
+            setup: {
+                type: 'text',
+                label: 'Username',
+                placeholder: 'Username',
+            }
+        },
+        {
+            name: 'name',
             type: 'text',
-            label: 'Name',
-            placeholder: 'Name',
-        }
-    },
-    {
-        name: 'role_id',
-        type: 'text',
-        dataType: 'string',
-        setup: {
+            dataType: 'string',
+            setup: {
+                type: 'text',
+                label: 'Name',
+                placeholder: 'Name',
+            }
+        },
+        {
+            name: 'role_id',
             type: 'text',
-            label: 'Role',
-            placeholder: 'Role',
+            dataType: 'string',
+            setup: {
+                type: 'text',
+                label: 'Role',
+                placeholder: 'Role',
+            }
         }
-    }
-]
+    ]
+}
 
 export { columns, filterMetadata, metadata };
