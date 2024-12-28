@@ -67,7 +67,7 @@ export type ButtonProps = {
     onClick: MouseEventHandler<HTMLButtonElement>;
     disabled?: boolean;
     loading?: boolean;
-    color?: 'blue' | 'red' | 'green' | 'yellow' | 'gray';
+    color?: 'blue' | 'red' | 'green' | 'yellow' | 'gray' | 'blue-outline' | 'red-outline' | 'green-outline' | 'yellow-outline' | 'gray-outline';
 };
 
 export type Fields = {

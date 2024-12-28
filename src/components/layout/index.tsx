@@ -4,7 +4,7 @@ import { AllType } from "@/extras/types";
 import { useCallback, useEffect, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { DBFilter, DBPagination } from "@/data/types";
-import Modal from "./modal";
+import Modal from "./formmodal";
 import Header from "./header";
 import { FormBuilderProps } from "../form/types";
 import { RenderForm } from "../form";
@@ -58,6 +58,7 @@ const Layout = (props: LayoutProps) => {
     }
     useEffect(() => {
         getData(pagination, props.filter?.fields.data as unknown as DBFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <div 
