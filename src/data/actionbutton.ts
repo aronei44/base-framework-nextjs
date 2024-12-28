@@ -1,9 +1,10 @@
 'use server';
 import dbconn from "./connection";
 import { ActionButton, MenuAction } from "./types";
-
+import { checkSession } from "@/extras/security";
 
 const getMenuAction = async (menu_id: string, tracer?: number) => {
+    await checkSession();
     const query = `
         SELECT
             ma.*
@@ -36,6 +37,7 @@ const getMenuAction = async (menu_id: string, tracer?: number) => {
 }
 
 const getActionButton = async (previous_state: string, action_id:string, role_id: string, tracer?: number) => {
+    await checkSession();
     const query = `
         SELECT fs.* from
             flow.flow_states fs
