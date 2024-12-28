@@ -1,17 +1,18 @@
 import Modal from "./modal"
 import Header from "./header"
-import { Button } from "../form";
+import { Button, RenderForm } from "../form";
+import { FormBuilderProps } from "../form/types";
 
 type ModalProps = {
-    children: React.ReactNode;
-    isOpen: boolean;
+    children?: React.ReactNode;
     setOpen: (isOpen: boolean) => void;
     title: string;
+    form?: FormBuilderProps
 }
 
 const FormModal = (props: ModalProps) => {
     return (
-        <Modal isOpen={props.isOpen}>
+        <Modal isOpen={true}>
             <Header
                 title={props.title}
                 rightComponent={
@@ -24,6 +25,12 @@ const FormModal = (props: ModalProps) => {
                 }
             />
             {props.children}
+
+            {props.form && (
+                <RenderForm
+                    {...props.form}
+                />
+            )}
 
             <hr />
             <div className="py-4 flex justify-between">

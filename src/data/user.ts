@@ -1,4 +1,5 @@
 'use server';
+import { AllType } from "@/extras/types";
 import dbconn from "./connection";
 import { DBFilter, DBPagination, User } from "./types";
 import { z } from "zod";
@@ -62,6 +63,15 @@ const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
         data: data as User[],
         total: (dataTotal[0] as {total: number}).total
     }
+}
+
+const getUser = async (data: Record<string, AllType>, tracer?: number) => {
+    const query = `SELECT * FROM users WHERE username = '${data.username}'`;
+    const {data: userData, error} = await dbconn(query, tracer);
+    if (error) {
+        return null;
+    }
+    return userData[0] as User;
 }
 
 const getUserById = async (username: string, tracer?: number) => {
@@ -129,6 +139,7 @@ export {
     createUser,
     updateUser,
     deleteUser,
-    updateUserPassword
+    updateUserPassword,
+    getUser
 }
 

@@ -90,6 +90,7 @@ export type DefaultFormBuilderProps = {
     validation?: (value: AllType, fields: Fields, validationFn: (value: AllType, options: ValidationOptions) => string) => string;
     name: string;
     required?: boolean;
+    dataType: 'string' | 'number' | 'boolean' | 'array' | 'object';
 };
 
 

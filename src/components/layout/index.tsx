@@ -9,6 +9,7 @@ import Header from "./header";
 import { FormBuilderProps } from "../form/types";
 import { RenderForm } from "../form";
 import Loading from "./loading";
+import { useAlert } from "@/extras/alertcontext";
 
 type LayoutProps = {
     getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<{data: Record<string, AllType>[], total: number}>
@@ -16,9 +17,13 @@ type LayoutProps = {
     columns: TableColumn<Record<string, unknown>>[]
     addState?: string
     filter?: FormBuilderProps
+    form?: {
+        getData: (data: Record<string, AllType>) => Promise<Record<string, AllType> | null>
+    } & FormBuilderProps
 }
 
 const Layout = (props: LayoutProps) => {
+    const alert = useAlert();
     const [data, setData] = useState<Record<string, AllType>[]>([]);
     const [pagination, setPagination] = useState<DBPagination>({ limit: 10, page: 1 });
     const [modal, setModal] = useState<boolean>(false);
@@ -56,10 +61,33 @@ const Layout = (props: LayoutProps) => {
             page: 1
         });
     }
+
+    const getOneData = async (data?: Record<string, AllType>) => {
+        if (props.form && data) {
+            const dataDB = await props.form.getData(data);
+            if (dataDB) {
+                props.form.setFields({
+                    data: {
+                        ...props.form.fields.data,
+                        ...dataDB
+                    },
+                    errors: {}
+                });
+            } else {
+                alert.swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Data tidak ditemukan'
+                })
+                setModal(false);
+            }
+        }
+    }
+
     useEffect(() => {
         getData(pagination, props.filter?.fields.data as unknown as DBFilter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [pagination, props.filter?.fields.data]);
     return (
         <div 
             className= "bg-white p-4 min-h-fit rounded-md shadow-lg" 
@@ -113,7 +141,7 @@ const Layout = (props: LayoutProps) => {
                     }}
                     paginationTotalRows={totalData}
                     actions={
-                        props.addState && <Button 
+                        props.addState && props.form && <Button 
                             key={1}
                             label={`+ Tambah ${props.addState}`}
                             color="green"
@@ -121,6 +149,7 @@ const Layout = (props: LayoutProps) => {
                                 e.stopPropagation();
                                 setModal(true);
                                 setModalState({ title: `Tambah ${props.addState}` });
+                                getOneData();
                             }}
                         />
                     }
@@ -128,13 +157,13 @@ const Layout = (props: LayoutProps) => {
                     progressComponent={<Loading />}
                 />
             </div>
-            <Modal 
-                isOpen={modal}
-                setOpen={setModal}    
-                title={modalState.title}
-            >
-                <h1>Modal</h1>
-            </Modal>
+            {modal && (
+                <Modal 
+                    setOpen={setModal}    
+                    title={modalState.title}
+                    form={props.form}
+                />
+            )}
          </div>
     )
 }

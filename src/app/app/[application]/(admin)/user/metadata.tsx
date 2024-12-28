@@ -21,10 +21,11 @@ const columns: TableColumn<Record<string, unknown>>[] = [
     },
 ]
 
-const metadata : MetadataProps = [
+const filterMetadata : MetadataProps = [
     {
         name: 'username',
         type: 'text',
+        dataType: 'string',
         setup: {
             type: 'text',
             label: 'Username',
@@ -33,4 +34,37 @@ const metadata : MetadataProps = [
     }
 ]
 
-export { columns, metadata };
+const metadata : MetadataProps = [
+    {
+        name: 'username',
+        type: 'text',
+        dataType: 'string',
+        setup: {
+            type: 'text',
+            label: 'Username',
+            placeholder: 'Username',
+        }
+    },
+    {
+        name: 'name',
+        type: 'text',
+        dataType: 'string',
+        setup: {
+            type: 'text',
+            label: 'Name',
+            placeholder: 'Name',
+        }
+    },
+    {
+        name: 'role_id',
+        type: 'text',
+        dataType: 'string',
+        setup: {
+            type: 'text',
+            label: 'Role',
+            placeholder: 'Role',
+        }
+    }
+]
+
+export { columns, filterMetadata, metadata };
