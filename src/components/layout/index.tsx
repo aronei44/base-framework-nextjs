@@ -67,24 +67,23 @@ const Layout = (props: LayoutProps) => {
         if (props.form?.onBeforeSubmit) {
             fields = props.form?.onBeforeSubmit(fields)
         }
-        if (Object.keys(fields.errors).length > 0) {
+        if (data.is_must_valid && Object.keys(fields.errors).length > 0) {
             let text = ''
             for (const key in fields.errors) {
                 if (![undefined, null, ''].includes(fields.errors[key])) {
-                    text += `${key}: ${fields.errors[key]}\n`
+                    text += `<p>${key}: ${fields.errors[key]}</p>`
                 }
             }
             alert.swal.fire({
                 title: 'Error Validation',
-                text: text,
+                html: text,
                 icon: 'error'
             })
             if (text !== '') return
         }
-        console.log({data, fields})
         alert.swal.fire({
             title: 'Success',
-            text: 'Data has been submitted',
+            html: `<p>Data has been submitted. <br/> '${data.description}'</p>`,
             icon: 'success'
         })
     }

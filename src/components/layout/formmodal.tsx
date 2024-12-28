@@ -13,10 +13,16 @@ const FormModal = (props: FormModalProps) => {
     const {state} = auth;
 
     const [actionButton, setActionButton] = useState<ActionButton[]>([]);
+    const [globalDisabled, setGlobalDisabled] = useState<boolean>(false);
 
     const getActionButtonList = async (state: string, action_id: string, role_id: string) => {
         const button = await getActionButton(state, action_id, role_id);
         setActionButton(button);
+        if (button.length === 0) {
+            setGlobalDisabled(true);
+        } else {
+            setGlobalDisabled(button[0].is_readonly);
+        }
     }
 
     useEffect(() => {
@@ -44,6 +50,7 @@ const FormModal = (props: FormModalProps) => {
             {props.form && (
                 <RenderForm
                     {...props.form}
+                    disabled={globalDisabled || props.form.disabled}
                 />
             )}
 

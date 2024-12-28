@@ -54,4 +54,5 @@ export type ActionButton = {
     description: string;
     flow_id: string;
     button_style: ButtonProps['color'];
+    is_must_valid: boolean;
 }
