@@ -1,3 +1,5 @@
+import { ButtonProps } from "@/components/form/types";
+
 export type DBPagination = {
     limit?: number;
     page?: number;
@@ -33,4 +35,23 @@ export type Menu = {
     is_active: boolean;
     menu_order: number;
     childs?: Menu[];
+}
+
+export type MenuAction = {
+    action_id: string;
+    menu_id: string;
+    action_role: string;
+    flow_id: string;
+    label: string;
+}
+
+export type ActionButton = {
+    state_name: string;
+    is_readonly: boolean;
+    is_final: boolean;
+    previous_state: string | null;
+    next_state: string;
+    description: string;
+    flow_id: string;
+    button_style: ButtonProps['color'];
 }

@@ -22,7 +22,7 @@ const User = () => {
             title="Pengelolaan User"
             addState="User"
             key="user"
-            menu_id="USERMENU"
+            menu_id="mnuADMUser"
             filter={{
                 ...filterMetadata,
                 fields: filter,
