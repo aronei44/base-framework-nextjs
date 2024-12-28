@@ -28,7 +28,7 @@ const colors = (color: ButtonProps['color']) => {
 }
 
 const Button = (props: ButtonProps) => {
-    const className = `text-white font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${colors(props.color)}`;
+    const className = `font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ${colors(props.color)}`;
 
     return (
         <button 
