@@ -13,10 +13,13 @@ import { getMenuAction } from "@/data/actionbutton";
 import { LayoutProps } from "./types";
 import ActionCell from "./actioncell";
 import defaultFields from "@/extras/defaultfields";
+import { saveData } from "@/data/flow";
+import { useAuth } from "@/extras/authcontext";
 
 
 const Layout = (props: LayoutProps) => {
     const alert = useAlert();
+    const auth = useAuth();
     const [data, setData] = useState<Record<string, AllType>[]>([]);
     const [pagination, setPagination] = useState<DBPagination>({ limit: 10, page: 1 });
     const [modalState, setModalState] = useState<{
@@ -60,7 +63,7 @@ const Layout = (props: LayoutProps) => {
             page: 1
         });
     }
-    const submitForm = (data: ActionButton) => {
+    const submitForm = async (data: ActionButton) => {
         let fields = props.form?.fields ?? defaultFields;
         if (props.form?.onBeforeSubmit) {
             fields = props.form?.onBeforeSubmit(fields)
@@ -79,6 +82,23 @@ const Layout = (props: LayoutProps) => {
             })
             if (text !== '') return
         }
+        console.log(fields.data)
+        const { data: dataRes, error} = await saveData(fields.data, data, props.menu_id, modalState.mode, auth.state.param.application as string, data.description);
+        if (error || (dataRes as {
+            success: boolean,
+            message: string
+        }).success === false) {
+            alert.swal.fire({
+                title: 'Error',
+                text: (dataRes as {
+                    success: boolean,
+                    message: string
+                }).message,
+                icon: 'error'
+            })
+            return
+        }
+
         alert.swal.fire({
             title: 'Success',
             html: `<p>Data has been submitted. <br/> '${data.description}'</p>`,
