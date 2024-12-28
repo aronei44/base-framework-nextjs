@@ -1,16 +1,10 @@
 import Modal from "./modal"
 import Header from "./header"
 import { Button, RenderForm } from "../form";
-import { FormBuilderProps } from "../form/types";
+import { FormModalProps } from "./types";
 
-type ModalProps = {
-    children?: React.ReactNode;
-    setOpen: (isOpen: boolean) => void;
-    title: string;
-    form?: FormBuilderProps
-}
 
-const FormModal = (props: ModalProps) => {
+const FormModal = (props: FormModalProps) => {
     return (
         <Modal isOpen={true}>
             <Header

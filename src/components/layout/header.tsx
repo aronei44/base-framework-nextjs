@@ -1,7 +1,4 @@
-type HeaderProps = {
-    title: string;
-    rightComponent?: React.ReactNode;
-}
+import { HeaderProps } from "./types";
 
 const Header = (props: HeaderProps) => {
     return (

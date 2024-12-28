@@ -6,68 +6,13 @@ import DataTable, { TableColumn } from "react-data-table-component";
 import { DBFilter, DBPagination, MenuAction } from "@/data/types";
 import Modal from "./formmodal";
 import Header from "./header";
-import { MetadataBuilderProps } from "../form/types";
 import { RenderForm } from "../form";
 import Loading from "./loading";
 import { useAlert } from "@/extras/alertcontext";
 import { getMenuAction } from "@/data/actionbutton";
+import { LayoutProps } from "./types";
+import ActionCell from "./actioncell";
 
-type ActionCellProps = {
-    row: Record<string, unknown>;
-    index: number;
-    tableActionMenu: MenuAction[];
-    setModalState: (state: { show: boolean; title: string; mode: string; state: string }) => void;
-    getOneData: (data: Record<string, AllType>) => void;
-    setShowAction: (index: number | null) => void;
-    showAction: number | null;
-}
-
-const ActionCell = (props: ActionCellProps) => (
-    <div className="relative">
-        <p
-            className="bg-slate-50 px-4 py-2 rounded-md border border-slate-500 hover:bg-slate-200 cursor-pointer active:bg-slate-500"
-            onClick={(e) => { 
-                e.stopPropagation();
-                props.setShowAction(props.index);
-            }}
-        >...</p>
-        {props.showAction === props.index && (
-            <div className="border border-slate-500 py-2 px-4 fixed z-[999] bg-white rounded-md">
-                {props.tableActionMenu.map((action, idx) => (
-                    <p
-                        key={'action_' + idx}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            props.setModalState({
-                                title: action.label,
-                                show: true,
-                                mode: action.action_id,
-                                state: ""
-                            });
-                            props.getOneData(props.row as Record<string, AllType>);
-                            props.setShowAction(null);
-                        }}
-                        className="my-2 cursor-pointer py-2 px-4 hover:bg-slate-50 rounded-md"
-                    >
-                        {action.label}
-                    </p>
-                ))}
-            </div>
-        )}
-    </div>
-);
-
-type LayoutProps = {
-    getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<{data: Record<string, AllType>[], total: number}>
-    title: string
-    columns: TableColumn<Record<string, unknown>>[]
-    addState?: string
-    filter?: MetadataBuilderProps
-    form?: {
-        getData: (data: Record<string, AllType>) => Promise<Record<string, AllType> | null>
-    } & MetadataBuilderProps
-    menu_id: string
-}
 
 const Layout = (props: LayoutProps) => {
     const alert = useAlert();

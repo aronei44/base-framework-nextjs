@@ -1,7 +1,4 @@
-type ModalProps = {
-    children: React.ReactNode;
-    isOpen: boolean;
-}
+import { ModalProps } from "./types";
 
 const Modal = (props: ModalProps) => {
     return (
