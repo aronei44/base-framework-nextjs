@@ -1,5 +1,5 @@
 import { FormBuilderProps, MetadataBuilderProps } from "../form/types";
-import { MenuAction, DBPagination, DBFilter } from "@/data/types";
+import { MenuAction, DBPagination, DBFilter, ActionButton } from "@/data/types";
 import { AllType } from "@/extras/types";
 import { TableColumn } from "react-data-table-component";
 
@@ -8,6 +8,7 @@ export type FormModalProps = {
     setOpen: (isOpen: boolean) => void;
     title: string;
     form?: FormBuilderProps
+    submitForm: (data: ActionButton) => void;
 }
 
 export type HeaderProps = {

@@ -135,7 +135,6 @@ export type FormBuilderProps = {
     onBeforeSubmit?: (fields: Fields) => Fields;
     content: MetadataProps;
     state: string;
-    withButton?: boolean;
 };
 
 export type MetadataBuilderProps = {

@@ -3,7 +3,7 @@ import { Button } from "@/components";
 import { AllType } from "@/extras/types";
 import { useCallback, useEffect, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
-import { DBFilter, DBPagination, MenuAction } from "@/data/types";
+import { ActionButton, DBFilter, DBPagination, MenuAction } from "@/data/types";
 import Modal from "./formmodal";
 import Header from "./header";
 import { RenderForm } from "../form";
@@ -61,6 +61,32 @@ const Layout = (props: LayoutProps) => {
             limit: 10,
             page: 1
         });
+    }
+    const submitForm = (data: ActionButton) => {
+        let fields = props.form?.fields ?? { data: {}, errors: {} }
+        if (props.form?.onBeforeSubmit) {
+            fields = props.form?.onBeforeSubmit(fields)
+        }
+        if (Object.keys(fields.errors).length > 0) {
+            let text = ''
+            for (const key in fields.errors) {
+                if (![undefined, null, ''].includes(fields.errors[key])) {
+                    text += `${key}: ${fields.errors[key]}\n`
+                }
+            }
+            alert.swal.fire({
+                title: 'Error Validation',
+                text: text,
+                icon: 'error'
+            })
+            if (text !== '') return
+        }
+        console.log({data, fields})
+        alert.swal.fire({
+            title: 'Success',
+            text: 'Data has been submitted',
+            icon: 'success'
+        })
     }
 
     const getOneData = useCallback(async (data?: Record<string, AllType>) => {
@@ -226,6 +252,7 @@ const Layout = (props: LayoutProps) => {
                         state: modalState.state,
                         ...props.form
                     }}
+                    submitForm={submitForm}
                 />
             )}
          </div>

@@ -48,7 +48,10 @@ const metadata : MinimizeMetadaBuilderProps = {
                 type: 'text',
                 label: 'Username',
                 placeholder: 'Username',
-            }
+            },
+            validation(value, fields, validationFn) {
+                return validationFn(value, { required: true });
+            },
         },
         {
             name: 'name',
