@@ -132,6 +132,11 @@ const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, 
         
             if (flow_data.is_final) {
                 query += await saveFunction[menu_id](data, action_id)
+                query += `
+                    UPDATE flow.flow_data SET
+                        final_state_at = NOW()
+                    WHERE id = (SELECT id FROM inserted_flow)
+                `
             }
         
             query += 'COMMIT;'

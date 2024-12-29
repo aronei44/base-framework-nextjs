@@ -62,3 +62,14 @@ export type Role = {
     role_name: string;
     description: string;
 }
+
+export type Otorisasi = {
+    id: number;
+    menu_id: string;
+    menu_name: string;
+    action_id: string;
+    action_name: string;
+    state_name: string;
+    description: string;
+    created_at: Date;
+}
