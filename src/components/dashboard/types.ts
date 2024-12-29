@@ -3,6 +3,7 @@ import { Menu, Application, User } from "@/data/types";
 export type SidebarProps = {
     menu: Menu[];
     prefix: string;
+    level?: number;
 }
 
 export type DropdownProps = {

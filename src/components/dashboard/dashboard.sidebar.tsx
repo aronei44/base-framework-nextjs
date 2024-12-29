@@ -9,8 +9,15 @@ const MenuBar = (props: SidebarProps) => {
             {props.menu.map((item) => {
                 if (item.childs) {
                     return (
-                        <SubMenu key={item.menu_id} title={item.menu_name}>
-                            <MenuBar menu={item.childs} prefix={props.prefix} />
+                        <SubMenu
+                            key={item.menu_id}
+                            title={
+                                <div className="my-2 bg-slate-50 py-2 rounded-md hover:bg-slate-100 cursor-pointer active:bg-slate-200" style={{ paddingLeft: 16 }}>
+                                    {item.menu_name}
+                                </div>
+                            }
+                        >
+                            <MenuBar menu={item.childs} prefix={props.prefix} level={(props.level ?? 0) + 1} />
                         </SubMenu>
                     )
                 }
@@ -22,7 +29,7 @@ const MenuBar = (props: SidebarProps) => {
                     >
                         <MenuItem
                             className="my-2 bg-slate-50 py-2 rounded-md hover:bg-slate-100 cursor-pointer active:bg-slate-200"
-                            style={{ paddingLeft: 16 }}
+                            style={{ paddingLeft: 16 + (props.level ?? 0) * 16 }}
                         >
                             {item.menu_name}
                         </MenuItem>
