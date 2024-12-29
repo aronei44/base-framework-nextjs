@@ -39,21 +39,26 @@ const getOtorisasi = async (pagination?: DBPagination, filter?: DBFilter, tracer
             fd.created_at
         FROM
             flow.flow_data fd
-        JOIN
-            flow.flow_states fs
-        ON
-            fd.next_state = fs.previous_state
     `
-    let whereClause = `
-        WHERE
-            fs.is_readonly = true
-            AND fd.app_id = '${application}'
-    `;
+    let whereClause = ``;
 
     if (!history) {
-        whereClause += 'AND fd.final_state_at IS NULL '
+        whereClause += `
+            JOIN
+                flow.flow_states fs
+            ON
+                fd.next_state = fs.previous_state
+            WHERE
+                fs.is_readonly = true
+                AND fd.app_id = '${application}'
+            AND fd.final_state_at IS NULL 
+        `
     } else {
-        whereClause += 'AND fd.final_state_at IS NOT NULL '
+        whereClause += `
+            WHERE
+                fd.app_id = '${application}'
+            AND fd.final_state_at IS NOT NULL
+        `
     }
 
     if (start_date) {
@@ -76,9 +81,8 @@ const getOtorisasi = async (pagination?: DBPagination, filter?: DBFilter, tracer
     }
 
     query = `
-        SELECT DISTINCT ON (fd.id) COUNT(*) as total
-        FROM flow.flow_data fd 
-        JOIN flow.flow_states fs ON fd.next_state = fs.previous_state 
+        SELECT COUNT(DISTINCT fd.id) as total
+        FROM flow.flow_data fd
     `;
     query += whereClause;
 
