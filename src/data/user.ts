@@ -3,6 +3,7 @@ import { AllType } from "@/extras/types";
 import dbconn from "./connection";
 import { DBFilter, DBPagination, User } from "./types";
 import { z } from "zod";
+import bcrypt from "bcrypt";
 
 
 const UserCreateSchema = z.object({
@@ -100,6 +101,38 @@ const getUserById = async (username: string, tracer?: number) => {
     return data[0] as User;
 }
 
+const checkUser = async (data: Record<string, AllType>, action_id: string) => {
+    const query = `SELECT * FROM users WHERE username = '${data.username}'`;
+    const {data: userData, error} = await dbconn(query);
+    if (error) {
+        return {
+            success: false,
+            message: 'Error when checking user'
+        }
+    }
+    if (userData.length === 0) {
+        return {
+            success: action_id === 'useradd',
+            message: 'User not found'
+        }
+    }
+    return {
+        success: action_id !== 'useradd',
+        message: 'User found'
+    }
+}
+
+const saveUser = async (data: Record<string, AllType>, action_id: string) => {
+    let query = '';
+    if (action_id === 'useradd') {
+        const hash = await bcrypt.hash(data.password as string, 10);
+        query = `INSERT INTO users (username, name, password, role) VALUES ('${data.username}', '${data.name}', '${hash}', '${data.role_id}')`;
+    } else {
+        query = `UPDATE users SET name = '${data.name}' WHERE username = '${data.username}'`;
+    }
+    return query;
+}
+
 
 const createUser = async (user: User, tracer?: number) => {
     const validationResult = await UserCreateSchema.safeParseAsync(user);
@@ -140,6 +173,8 @@ export {
     updateUser,
     deleteUser,
     updateUserPassword,
-    getUser
+    getUser,
+    checkUser,
+    saveUser
 }
 

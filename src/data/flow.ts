@@ -4,20 +4,8 @@ import { ActionButton } from "./types";
 import { checkSession } from "@/extras/security";
 import dbconn from "./connection";
 import safecall from "@/extras/safecall";
-import { checkRole } from "./role";
-
-const checkUser = async (data: Record<string, AllType>, action_id: string) => {
-    console.log(data, action_id)
-    return {
-        success: true,
-        message: 'Data valid'
-    }
-}
-
-const saveUser = async (data: Record<string, AllType>, action_id: string) => {
-    console.log(data, action_id)
-    return 'insert into user'
-}
+import { checkRole, saveRole } from "./role";
+import { checkUser, saveUser } from "./user";
 
 const validationFunction : Record<string, (data: Record<string, AllType>, action_id: string) => Promise<{success:boolean, message: string}>> = {
     'mnuADMUser': checkUser,
@@ -25,7 +13,8 @@ const validationFunction : Record<string, (data: Record<string, AllType>, action
 }
 
 const saveFunction: Record<string, (data: Record<string, AllType>, action_id: string) => Promise<string>> = {
-    'mnuADMUser': saveUser
+    'mnuADMUser': saveUser,
+    'mnuADMRole': saveRole
 }
 
 const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, menu_id: string, action_id: string, app_id: string, remark: string, flow_id?: number) => {
