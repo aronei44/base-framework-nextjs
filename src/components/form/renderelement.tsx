@@ -32,19 +32,23 @@ const validationFn = (value: AllType, options: ValidationOptions) => {
 const RenderElement = (props: RenderElementProps) => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (['checkbox', 'radio', 'switch'].includes(props.type)) {
-            props.setFields({
-                ...props.fields,
-                data: {
-                    ...props.fields.data,
-                    [props.name]: e.target.checked
+            props.setFields(prev =>{
+                return {
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        [props.name]: e.target.checked
+                    }
                 }
             })
         } else {
-            props.setFields({
-                ...props.fields,
-                data: {
-                    ...props.fields.data,
-                    [props.name]: e.target.value
+            props.setFields(prev =>{
+                return {
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        [props.name]: e.target.value
+                    }
                 }
             })
         }
@@ -78,11 +82,13 @@ const RenderElement = (props: RenderElementProps) => {
     const Revalidate = useCallback(() => {
         const Validation = (value: AllType, fields: Fields, fn: (value: AllType, fields: Fields, validationFn: (value: AllType, options: ValidationOptions) => string) => string) => {
             const error = fn(value, fields, validationFn);
-            setFields({
-                ...fields,
-                errors: {
-                    ...fields.errors,
-                    [name]: error
+            setFields(prev => {
+                return {
+                    ...prev,
+                    errors: {
+                        ...prev.errors,
+                        [name]: error
+                    }
                 }
             })
         }

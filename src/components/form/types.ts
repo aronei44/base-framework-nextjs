@@ -1,5 +1,5 @@
 import { AllType } from "@/extras/types";
-import { MouseEventHandler } from "react";
+import { Dispatch, MouseEventHandler, SetStateAction } from "react";
 
 export type DefaultFormProps = {
     name?: string;
@@ -116,7 +116,7 @@ export type SwitchFormBuilderProps = {
 
 type RenderElementAdditionalProps = {
     fields: Fields;
-    setFields: (fields: Fields) => void;
+    setFields: Dispatch<SetStateAction<Fields>>;
     state: string;
     globalDisabled?: boolean;
 }
@@ -126,7 +126,7 @@ export type RenderElementProps = DefaultFormBuilderProps & SwitchFormBuilderProp
 export type FormBuilderProps = {
     menu_id: string;
     fields: Fields;
-    setFields: (fields: Fields) => void;
+    setFields: Dispatch<SetStateAction<Fields>>;
     mode: string;
     disabled?: boolean | ((state: string) => boolean);
     cols: number;
@@ -139,7 +139,7 @@ export type FormBuilderProps = {
 
 export type MetadataBuilderProps = {
     fields: Fields;
-    setFields: (fields: Fields) => void;
+    setFields: Dispatch<SetStateAction<Fields>>;
     disabled?: boolean | ((state: string) => boolean);
     cols: number;
     title?: string;

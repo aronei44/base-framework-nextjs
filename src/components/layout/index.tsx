@@ -145,12 +145,14 @@ const Layout = (props: LayoutProps) => {
             const dataDB = await props.form.getData(data);
             if (dataDB) {
                 if (!props.globalMetadata) {
-                    props.form.setFields({
-                        data: {
-                            ...props.form.fields.data,
-                            ...dataDB
-                        },
-                        errors: {}
+                    props.form.setFields(prev => {
+                        return {
+                            data: {
+                                ...prev.data,
+                                ...dataDB
+                            },
+                            errors: {}
+                        }
                     });
                 } else {
                     setOtorFields({
@@ -159,12 +161,14 @@ const Layout = (props: LayoutProps) => {
                         flow_action: dataDB.action_id as string,
                         flow_menu: dataDB.menu_id as string
                     })
-                    props.form.setFields({
-                        data: {
-                            ...props.form.fields.data,
-                            ...dataDB.data as Record<string, AllType>
-                        },
-                        errors: {}
+                    props.form.setFields(prev => {
+                        return {
+                            data: {
+                                ...prev.data,
+                                ...dataDB.data as Record<string, AllType>
+                            },
+                            errors: {}
+                        }
                     });
                 }
             } else {

@@ -29,12 +29,14 @@ const RenderForm = (props: FormBuilderProps) => {
     const initiateFields = useCallback((content: MetadataProps) => {
         if (fields.data && Object.keys(fields.data).length > 0) return
         const newFields = contentToFields(content)
-        setFields({
-            data: {
-                ...newFields,
-                ...fields.data
-            },
-            errors: {}
+        setFields(prev => {
+            return {
+                data: {
+                    ...newFields,
+                    ...prev.data
+                },
+                errors: {}
+            }
         })
     }, [fields.data, setFields])
 
