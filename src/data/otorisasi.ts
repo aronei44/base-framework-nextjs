@@ -97,7 +97,14 @@ const getOtorisasi = async (pagination?: DBPagination, filter?: DBFilter, tracer
 }
 
 const getOtorOne = async (data: Record<string, AllType>, tracer?: number) => {
-    const query = `SELECT * FROM roles WHERE role_id = '${data.username}'`;
+    const query = `
+        SELECT
+            fd.*
+        FROM
+            flow.flow_data fd
+        WHERE
+            fd.id = ${data.id}
+    `;
     const { data: userData, error } = await dbconn(query, tracer);
     if (error) {
         return null;

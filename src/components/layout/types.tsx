@@ -1,4 +1,4 @@
-import { FormBuilderProps, MetadataBuilderProps } from "../form/types";
+import { FormBuilderProps, MetadataBuilderProps, MinimizeMetadaBuilderProps } from "../form/types";
 import { MenuAction, DBPagination, DBFilter, ActionButton } from "@/data/types";
 import { AllType } from "@/extras/types";
 import { TableColumn } from "react-data-table-component";
@@ -41,4 +41,5 @@ export type LayoutProps = {
         getData: (data: Record<string, AllType>) => Promise<Record<string, AllType> | null>
     } & MetadataBuilderProps
     menu_id: string
+    globalMetadata?: Record<string, MinimizeMetadaBuilderProps>
 }

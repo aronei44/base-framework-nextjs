@@ -106,9 +106,9 @@ const checkRole = async (data: Record<string, AllType>, action_id: string) => {
 const saveRole = async (data: Record<string, AllType>, action_id: string) => {
     let query = '';
     if (action_id === 'roleadd') {
-        query = `INSERT INTO roles (role_id, role_name) VALUES ('${data.role_id}', '${data.role_name}')`;
+        query = `INSERT INTO roles (role_id, role_name) VALUES ('${data.role_id}', '${data.role_name}');`;
     } else {
-        query = `UPDATE roles SET role_name = '${data.role_name}' WHERE role_id = '${data.role_id}'`;
+        query = `UPDATE roles SET role_name = '${data.role_name}' WHERE role_id = '${data.role_id}';`;
     }
     return query;
 }

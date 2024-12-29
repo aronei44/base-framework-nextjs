@@ -4,9 +4,10 @@ import { columns, filterMetadata, metadata } from "./metadata";
 import { Fields } from "@/components/form/types";
 import { useEffect, useState } from "react";
 import defaultFields from "@/extras/defaultfields";
-import { getRole } from "@/data/role";
 import { useParams } from "next/navigation";
-import { getOtorisasi } from "@/data/otorisasi";
+import { getOtorisasi, getOtorOne } from "@/data/otorisasi";
+import { metadata as metadataUser } from "../../user/metadata";
+import { metadata as metadataRole } from "../../role/metadata";
 
 const Otorisasi = () => {
     const param = useParams();
@@ -45,7 +46,11 @@ const Otorisasi = () => {
                 ...metadata,
                 fields: fields,
                 setFields: setFields,
-                getData: getRole
+                getData: getOtorOne
+            }}
+            globalMetadata={{
+                'mnuADMUser': metadataUser,
+                'mnuADMRole': metadataRole
             }}
         />
     )

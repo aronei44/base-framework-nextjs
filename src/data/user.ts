@@ -145,9 +145,9 @@ const saveUser = async (data: Record<string, AllType>, action_id: string) => {
     let query = '';
     if (action_id === 'useradd') {
         const hash = await bcrypt.hash(data.password as string, 10);
-        query = `INSERT INTO users (username, name, password, role) VALUES ('${data.username}', '${data.name}', '${hash}', '${data.role_id}')`;
+        query = `INSERT INTO users (username, name, password, role) VALUES ('${data.username}', '${data.name}', '${hash}', '${data.role_id}');`;
     } else {
-        query = `UPDATE users SET name = '${data.name}' WHERE username = '${data.username}'`;
+        query = `UPDATE users SET name = '${data.name}' WHERE username = '${data.username}';`;
     }
     return query;
 }

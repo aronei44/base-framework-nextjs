@@ -65,46 +65,7 @@ const filterMetadata : MinimizeMetadaBuilderProps = {
 
 const metadata : MinimizeMetadaBuilderProps = {
     cols: 3,
-    content: [
-        {
-            name: 'role_id',
-            type: 'text',
-            dataType: 'string',
-            required: true,
-            setup: {
-                type: 'text',
-                label: 'Role ID',
-                placeholder: 'Role ID',
-            },
-            validation(value, fields, validationFn) {
-                return validationFn(value, { required: true });
-            },
-        },
-        {
-            name: 'role_name',
-            type: 'text',
-            dataType: 'string',
-            required: true,
-            setup: {
-                type: 'text',
-                label: 'Role Name',
-                placeholder: 'Role Name',
-            },
-            validation(value, fields, validationFn) {
-                return validationFn(value, { required: true });
-            },
-        },
-        {
-            name: 'description',
-            type: 'text',
-            dataType: 'string',
-            setup: {
-                type: 'text',
-                label: 'Description',
-                placeholder: 'Description',
-            }
-        }
-    ]
+    content: []
 }
 
 export { columns, filterMetadata, metadata };

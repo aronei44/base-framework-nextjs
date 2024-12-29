@@ -15,6 +15,7 @@ import ActionCell from "./actioncell";
 import defaultFields from "@/extras/defaultfields";
 import { saveData } from "@/data/flow";
 import { useAuth } from "@/extras/authcontext";
+import { MinimizeMetadaBuilderProps } from "../form/types";
 
 
 const Layout = (props: LayoutProps) => {
@@ -40,6 +41,17 @@ const Layout = (props: LayoutProps) => {
     const [tableActionMenu, setTableActionMenu] = useState<MenuAction[]>([]);
     const [columns, setColumns] = useState<TableColumn<Record<string, unknown>>[]>([]);
     const [showAction, setShowAction] = useState<number | null>(null);
+    const [metadata, setMetadata] = useState<MinimizeMetadaBuilderProps | null>(null);
+    const [otorFields, setOtorFields] = useState<{
+        flow_id?: number;
+        flow_state: string;
+        flow_action: string;
+        flow_menu: string;
+    }>({
+        flow_state: '',
+        flow_action: '',
+        flow_menu: ''
+    });
 
     const getData = useCallback(async (pagination: DBPagination, filter: DBFilter = {}) => {
         setLoading(true);
@@ -84,7 +96,16 @@ const Layout = (props: LayoutProps) => {
                 return
             }
         }
-        const { data: dataRes, error} = await saveData(fields.data, data, props.menu_id, modalState.mode, auth.state.param.application as string, data.description);
+
+        const { data: dataRes, error} = await saveData(
+                                                fields.data, 
+                                                data, 
+                                                props.globalMetadata ? otorFields.flow_menu : props.menu_id, 
+                                                props.globalMetadata ? otorFields.flow_action : modalState.mode, 
+                                                auth.state.param.application as string, 
+                                                data.description, 
+                                                otorFields.flow_id
+                                            );
         if (error || (dataRes as {
             success: boolean,
             message: string
@@ -114,13 +135,29 @@ const Layout = (props: LayoutProps) => {
         if (props.form && data) {
             const dataDB = await props.form.getData(data);
             if (dataDB) {
-                props.form.setFields({
-                    data: {
-                        ...props.form.fields.data,
-                        ...dataDB
-                    },
-                    errors: {}
-                });
+                if (!props.globalMetadata) {
+                    props.form.setFields({
+                        data: {
+                            ...props.form.fields.data,
+                            ...dataDB
+                        },
+                        errors: {}
+                    });
+                } else {
+                    setOtorFields({
+                        flow_id: dataDB.id as number,
+                        flow_state: dataDB.next_state as string,
+                        flow_action: dataDB.action_id as string,
+                        flow_menu: dataDB.menu_id as string
+                    })
+                    props.form.setFields({
+                        data: {
+                            ...props.form.fields.data,
+                            ...dataDB.data as Record<string, AllType>
+                        },
+                        errors: {}
+                    });
+                }
             } else {
                 alert.swal.fire({
                     icon: 'error',
@@ -130,7 +167,7 @@ const Layout = (props: LayoutProps) => {
                 setModalState({ ...modalState, show: false });
             }
         }
-    }, [props.form, alert.swal, modalState]);
+    }, [props.form, alert.swal, modalState, props.globalMetadata]);
 
     const getMenuActionList = useCallback(async () => {
         const [add, table] = await getMenuAction(props.menu_id);
@@ -176,6 +213,15 @@ const Layout = (props: LayoutProps) => {
         appendData();
     }, [props.columns, tableActionMenu, appendData]);
 
+    useEffect(()=> {
+        if (props.form) {
+            if (props.globalMetadata) {
+                setMetadata(props.globalMetadata[otorFields.flow_menu]);
+            } else {
+                setMetadata(props.form);
+            }
+        }
+    }, [props.form, props.globalMetadata, otorFields.flow_menu]);
     return (
         <div 
             className= "bg-white p-4 min-h-fit rounded-md shadow-lg" 
@@ -265,10 +311,11 @@ const Layout = (props: LayoutProps) => {
                     }}    
                     title={modalState.title}
                     form={{
-                        menu_id: props.menu_id,
-                        mode: modalState.mode,
-                        state: modalState.state,
-                        ...props.form
+                        menu_id: props.globalMetadata ? otorFields.flow_menu : props.menu_id,
+                        mode: props.globalMetadata ? otorFields.flow_action : modalState.mode,
+                        state: props.globalMetadata ? otorFields.flow_state : modalState.state,
+                        ...props.form,
+                        ...metadata
                     }}
                     submitForm={submitForm}
                 />

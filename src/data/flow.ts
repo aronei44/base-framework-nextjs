@@ -50,7 +50,7 @@ const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, 
             if (flow_id) {
                 query += `
                     WITH updated_flow AS (
-                        UPDATE flow SET 
+                        UPDATE flow.flow_data SET 
                             data = '${JSON.stringify(data)}',
                             state_name = '${flow_data.state_name}',
                             next_state = '${flow_data.next_state || ''}'
@@ -135,7 +135,7 @@ const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, 
                 query += `
                     UPDATE flow.flow_data SET
                         final_state_at = NOW()
-                    WHERE id = (SELECT id FROM inserted_flow)
+                    WHERE id = ${flow_id};
                 `
             }
         
