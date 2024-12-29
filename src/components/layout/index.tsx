@@ -97,13 +97,22 @@ const Layout = (props: LayoutProps) => {
             }
         }
 
+        const remark = await alert.swal.fire({
+            title: "Konfirmasi",
+            text: "Keterangan",
+            icon: "info",
+            showCancelButton: true,
+            input: "text",
+            inputPlaceholder: "Keterangan",
+        });
+
         const { data: dataRes, error} = await saveData(
                                                 fields.data, 
                                                 data, 
                                                 props.globalMetadata ? otorFields.flow_menu : props.menu_id, 
                                                 props.globalMetadata ? otorFields.flow_action : modalState.mode, 
                                                 auth.state.param.application as string, 
-                                                data.description, 
+                                                remark.value ?? '', 
                                                 otorFields.flow_id
                                             );
         if (error || (dataRes as {
