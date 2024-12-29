@@ -2,6 +2,18 @@
 import dbconn from "./connection";
 import { DBPagination, DBFilter, Role } from "./types";
 import { AllType } from "@/extras/types";
+import { z } from "zod";
+
+const RoleCreateSchema = z.object({
+    role_id: z.string().min(1),
+    role_name: z.string().min(1),
+});
+
+const RoleUpdateSchema = z.object({
+    role_id: z.string().min(1),
+    role_name: z.string().min(1),
+});
+
 
 const getRoles = async (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => {
     const limit = pagination?.limit ?? 10;
@@ -52,6 +64,25 @@ const getRole = async (data: Record<string, AllType>, tracer?: number) => {
 }
 
 const checkRole = async (data: Record<string, AllType>, action_id: string) => {
+
+    if (action_id === 'roleadd') {
+        const validationResult = await RoleCreateSchema.safeParseAsync(data);
+        if (!validationResult.success) {
+            return {
+                success: false,
+                message: validationResult.error.errors[0].message
+            }
+        }
+    } else {
+        const validationResult = await RoleUpdateSchema.safeParseAsync(data);
+        if (!validationResult.success) {
+            return {
+                success: false,
+                message: validationResult.error.errors[0].message
+            }
+        }
+    }
+
     const query = `SELECT * FROM roles WHERE role_id = '${data.role_id}'`;
     const { data: roleData, error } = await dbconn(query);
     if (error) {

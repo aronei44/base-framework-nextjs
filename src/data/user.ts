@@ -102,6 +102,25 @@ const getUserById = async (username: string, tracer?: number) => {
 }
 
 const checkUser = async (data: Record<string, AllType>, action_id: string) => {
+
+    if (action_id === 'useradd') {
+        const validationResult = await UserCreateSchema.safeParseAsync(data);
+        if (!validationResult.success) {
+            return {
+                success: false,
+                message: validationResult.error.errors[0].message
+            }
+        }
+    } else {
+        const validationResult = await UserUpdateSchema.safeParseAsync(data);
+        if (!validationResult.success) {
+            return {
+                success: false,
+                message: validationResult.error.errors[0].message
+            }
+        }
+    }
+
     const query = `SELECT * FROM users WHERE username = '${data.username}'`;
     const {data: userData, error} = await dbconn(query);
     if (error) {
