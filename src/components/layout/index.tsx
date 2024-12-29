@@ -75,14 +75,15 @@ const Layout = (props: LayoutProps) => {
                     text += `<p>${key}: ${fields.errors[key]}</p>`
                 }
             }
-            alert.swal.fire({
-                title: 'Error Validation',
-                html: text,
-                icon: 'error'
-            })
-            if (text !== '') return
+            if (text !== '') {
+                alert.swal.fire({
+                    title: 'Error Validation',
+                    html: text,
+                    icon: 'error'
+                })
+                return
+            }
         }
-        console.log(fields.data)
         const { data: dataRes, error} = await saveData(fields.data, data, props.menu_id, modalState.mode, auth.state.param.application as string, data.description);
         if (error || (dataRes as {
             success: boolean,
@@ -104,6 +105,9 @@ const Layout = (props: LayoutProps) => {
             html: `<p>Data has been submitted. <br/> '${data.description}'</p>`,
             icon: 'success'
         })
+
+        props.form?.setFields(defaultFields);
+        setModalState({ ...modalState, show: false });
     }
 
     const getOneData = useCallback(async (data?: Record<string, AllType>) => {

@@ -56,3 +56,9 @@ export type ActionButton = {
     button_style: ButtonProps['color'];
     is_must_valid: boolean;
 }
+
+export type Role = {
+    role_id: string;
+    role_name: string;
+    description: string;
+}

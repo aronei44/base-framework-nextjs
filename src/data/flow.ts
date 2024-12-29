@@ -4,6 +4,7 @@ import { ActionButton } from "./types";
 import { checkSession } from "@/extras/security";
 import dbconn from "./connection";
 import safecall from "@/extras/safecall";
+import { checkRole } from "./role";
 
 const checkUser = async (data: Record<string, AllType>, action_id: string) => {
     console.log(data, action_id)
@@ -19,7 +20,8 @@ const saveUser = async (data: Record<string, AllType>, action_id: string) => {
 }
 
 const validationFunction : Record<string, (data: Record<string, AllType>, action_id: string) => Promise<{success:boolean, message: string}>> = {
-    'mnuADMUser': checkUser
+    'mnuADMUser': checkUser,
+    'mnuADMRole': checkRole
 }
 
 const saveFunction: Record<string, (data: Record<string, AllType>, action_id: string) => Promise<string>> = {
