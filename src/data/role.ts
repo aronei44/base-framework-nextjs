@@ -27,7 +27,7 @@ const getRoles = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
     `
 
     if (filter?.role_name) {
-        query += `WHERE u.role_name LIKE '%${filter.role_name}%'`
+        query += `WHERE r.role_name LIKE '%${filter.role_name}%'`
     }
 
     query += `LIMIT ${limit} OFFSET ${offset}`
