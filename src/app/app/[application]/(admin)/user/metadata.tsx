@@ -45,7 +45,6 @@ const metadata : MinimizeMetadaBuilderProps = {
             type: 'text',
             dataType: 'string',
             setup: {
-                type: 'text',
                 label: 'Username',
                 placeholder: 'Username',
             },
@@ -58,7 +57,6 @@ const metadata : MinimizeMetadaBuilderProps = {
             type: 'text',
             dataType: 'string',
             setup: {
-                type: 'text',
                 label: 'Name',
                 placeholder: 'Name',
             }

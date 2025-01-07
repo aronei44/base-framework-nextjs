@@ -13,7 +13,7 @@ export type DefaultFormProps = {
 export type InputProps = {
     label?: string;
     placeholder?: string;
-    type: 'text' | 'password' | 'date';
+    type?: 'text' | 'password' | 'date';
 }
 
 export type CheckboxProps = {
