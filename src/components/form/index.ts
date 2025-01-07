@@ -8,3 +8,4 @@ export { default as Group } from './group';
 export { default as Tab } from './tab';
 export { default as RenderElement } from './renderelement';
 export { default as RenderForm } from './renderform';
+export { default as Select } from './select';

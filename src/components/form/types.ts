@@ -31,6 +31,11 @@ export type SwitchProps = {
     checked: boolean;
 }
 
+export type SelectProps = {
+    label: string;
+    options: { label: string, value: string }[];
+}
+
 export type LabelProps = {
     label?: string;
     name?: string;
@@ -112,6 +117,12 @@ export type SwitchFormBuilderProps = {
 } | {
     type: 'tab';
     setup: TabProps;
+} | {
+    type: 'button';
+    setup: ButtonProps;
+} | {
+    type: 'select';
+    setup: SelectProps;
 };
 
 type RenderElementAdditionalProps = {

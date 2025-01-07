@@ -7,6 +7,7 @@ import {
     Switch,
     Group,
     Tab,
+    Select,
 } from '.';
 import { useCallback, useEffect } from "react";
 
@@ -187,6 +188,20 @@ const RenderElement = (props: RenderElementProps) => {
                     setFields={props.setFields}
                     state={props.state}
                     globalDisabled={props.globalDisabled}
+                />
+            )
+        
+        case 'select':
+            return (
+                <Select
+                    label={props.setup.label}
+                    onChange={onChange}
+                    options={props.setup.options}
+                    value={props.fields.data[props.name] as string}
+                    disabled={unable}
+                    error={props.fields.errors[props.name]}
+                    required={props.required}
+                    name={props.name}
                 />
             )
 

@@ -65,13 +65,24 @@ const metadata : MinimizeMetadaBuilderProps = {
         },
         {
             name: 'role_id',
-            type: 'text',
+            type: 'select',
             dataType: 'string',
             setup: {
-                type: 'text',
                 label: 'Role',
-                placeholder: 'Role',
-            }
+                options: [
+                    {
+                        label: 'Admin',
+                        value: 'admin'
+                    },
+                    {
+                        label: 'User',
+                        value: 'user'
+                    }
+                ]
+            },
+            validation(value, fields, validationFn) {
+                return validationFn(value, { required: true });
+            },
         }
     ]
 }
