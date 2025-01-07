@@ -8,6 +8,7 @@ import {
     Group,
     Tab,
     Select,
+    SelectMultiple
 } from '.';
 import { useCallback, useEffect } from "react";
 
@@ -194,6 +195,20 @@ const RenderElement = (props: RenderElementProps) => {
         case 'select':
             return (
                 <Select
+                    label={props.setup.label}
+                    onChange={onChange}
+                    options={props.setup.options}
+                    value={props.fields.data[props.name] as string}
+                    disabled={unable}
+                    error={props.fields.errors[props.name]}
+                    required={props.required}
+                    name={props.name}
+                />
+            )
+
+        case 'select-multiple':
+            return (
+                <SelectMultiple
                     label={props.setup.label}
                     onChange={onChange}
                     options={props.setup.options}

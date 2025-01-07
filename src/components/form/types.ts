@@ -36,6 +36,11 @@ export type SelectProps = {
     options: { label: string, value: string }[];
 }
 
+export type SelectMultipleProps = {
+    label: string;
+    options: { label: string, value: string }[];
+}
+
 export type LabelProps = {
     label?: string;
     name?: string;
@@ -123,6 +128,9 @@ export type SwitchFormBuilderProps = {
 } | {
     type: 'select';
     setup: SelectProps;
+} | {
+    type: 'select-multiple';
+    setup: SelectMultipleProps;
 };
 
 type RenderElementAdditionalProps = {
