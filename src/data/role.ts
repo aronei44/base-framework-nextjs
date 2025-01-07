@@ -55,7 +55,7 @@ const getRoles = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
 }
 
 const getRole = async (data: Record<string, AllType>, tracer?: number) => {
-    const query = `SELECT * FROM roles WHERE role_id = '${data.username}'`;
+    const query = `SELECT * FROM roles WHERE role_id = '${data.role_id}'`;
     const { data: userData, error } = await dbconn(query, tracer);
     if (error) {
         return null;
