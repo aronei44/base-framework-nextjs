@@ -32,7 +32,7 @@ const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, 
                     message: string
                 }
             }
-            if (!flow_data.is_readonly) { // check if data is save to draft
+            if (flow_data.is_must_valid) { // check if data is save to draft
                 const valid = await validationFunction[menu_id](data, action_id)
                 if (!valid.success) {
                     return {
