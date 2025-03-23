@@ -2,6 +2,7 @@
 import { TableColumn } from "react-data-table-component";
 import { User } from "@/data/types";
 import { MinimizeMetadaBuilderProps } from "@/components/form/types";
+import { getRoles } from "@/data/role";
 
 const columns: TableColumn<Record<string, unknown>>[] = [
     {
@@ -38,7 +39,7 @@ const filterMetadata : MinimizeMetadaBuilderProps = {
 }
 
 const metadata : MinimizeMetadaBuilderProps = {
-    cols: 3,
+    cols: 4,
     content: [
         {
             name: 'username',
@@ -63,20 +64,37 @@ const metadata : MinimizeMetadaBuilderProps = {
         },
         {
             name: 'role_id',
-            type: 'select',
+            type: 'async-select',
             dataType: 'string',
             setup: {
                 label: 'Role',
-                options: [
-                    {
-                        label: 'Admin',
-                        value: 'admin'
-                    },
-                    {
-                        label: 'User',
-                        value: 'user'
-                    }
-                ]
+                getData: getRoles,
+                mapper: (data) => {
+                    const result: Array<{value: string, label: string}> = [];
+                    data.forEach((item) => {
+                        result.push({
+                            label: item.role_name as string,
+                            value: item.role_id as string
+                        })
+                    }); 
+                    return result;
+                },
+                searchKeyword: 'role_name',
+            },
+            validation(value, fields, validationFn) {
+                return validationFn(value, { required: true });
+            },
+        },
+        {
+            name: 'password',
+            type: 'text',
+            dataType: 'string',
+            setup: {
+                label: 'Password',
+                placeholder: 'Password',
+            },
+            hidden(fields, state) {
+                return state !== 'useradd';
             },
             validation(value, fields, validationFn) {
                 return validationFn(value, { required: true });

@@ -10,7 +10,7 @@ const UserCreateSchema = z.object({
     username: z.string().min(1),
     name: z.string().min(1),
     password: z.string().min(1),
-    role: z.string().min(1),
+    role_id: z.string().min(1),
 });
 
 const UserUpdateSchema = z.object({
@@ -67,7 +67,7 @@ const getUsers = async (pagination?: DBPagination, filter?: DBFilter, tracer?: n
 }
 
 const getUser = async (data: Record<string, AllType>, tracer?: number) => {
-    const query = `SELECT * FROM users WHERE username = '${data.username}'`;
+    const query = `SELECT username, name, role as role_id FROM users WHERE username = '${data.username}'`;
     const {data: userData, error} = await dbconn(query, tracer);
     if (error) {
         return null;

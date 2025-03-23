@@ -10,3 +10,4 @@ export { default as RenderElement } from './renderelement';
 export { default as RenderForm } from './renderform';
 export { default as Select } from './select';
 export { default as SelectMultiple } from './select.multiple';
+export { default as AsyncSelect } from './select.async';

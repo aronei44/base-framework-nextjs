@@ -62,7 +62,7 @@ const Layout = (props: LayoutProps) => {
         setTimeout(() => {
             setLoading(false);
         }, 1000);
-        if ((pagination?.page || 0) > 1 && dataDB.length === 0) {
+        if ((pagination?.page ?? 0) > 1 && dataDB.length === 0) {
             getData({ ...pagination, page: 1 }, filter);
         }
     }, [props]);

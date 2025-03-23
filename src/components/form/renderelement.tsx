@@ -8,7 +8,8 @@ import {
     Group,
     Tab,
     Select,
-    SelectMultiple
+    SelectMultiple,
+    AsyncSelect
 } from '.';
 import { useCallback, useEffect } from "react";
 
@@ -217,6 +218,22 @@ const RenderElement = (props: RenderElementProps) => {
                     error={props.fields.errors[props.name]}
                     required={props.required}
                     name={props.name}
+                />
+            )
+
+        case 'async-select':
+            return (
+                <AsyncSelect
+                    label={props.setup.label}
+                    onChange={onChange}
+                    getData={props.setup.getData}
+                    mapper={props.setup.mapper}
+                    value={props.fields.data[props.name] as string}
+                    disabled={unable}
+                    error={props.fields.errors[props.name]}
+                    required={props.required}
+                    name={props.name}
+                    searchKeyword={props.setup.searchKeyword}
                 />
             )
 

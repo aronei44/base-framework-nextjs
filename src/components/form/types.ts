@@ -1,5 +1,6 @@
 import { AllType } from "@/extras/types";
 import { Dispatch, MouseEventHandler, SetStateAction } from "react";
+import { DBPagination, DBFilter } from "@/data/types";
 
 export type DefaultFormProps = {
     name?: string;
@@ -34,6 +35,13 @@ export type SwitchProps = {
 export type SelectProps = {
     label: string;
     options: { label: string, value: string }[];
+}
+
+export type AsyncSelectProps = {
+    label: string;
+    getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<{data: Record<string, AllType>[], total: number}>
+    mapper: (data: Record<string, AllType>[]) => Array<{ label: string, value: string | number | boolean }>;
+    searchKeyword: string;
 }
 
 export type SelectMultipleProps = {
@@ -131,6 +139,9 @@ export type SwitchFormBuilderProps = {
 } | {
     type: 'select-multiple';
     setup: SelectMultipleProps;
+} | {
+    type: 'async-select';
+    setup: AsyncSelectProps;
 };
 
 type RenderElementAdditionalProps = {
