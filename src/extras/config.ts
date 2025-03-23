@@ -14,7 +14,8 @@ const getConfig = async () => {
         DB_HOST: process.env.DB_HOST ?? 'localhost',
         DB_PORT: process.env.DB_PORT ?? '5432',
         DB_DIALECT: process.env.DB_DIALECT ?? 'postgres',
-        SESSION_TIMEOUT: process.env.SESSION_TIMEOUT ?? '1800'
+        SESSION_TIMEOUT: process.env.SESSION_TIMEOUT ?? '1800',
+        USE_REDIS: process.env.USE_REDIS === 'true',
     }
 }
 

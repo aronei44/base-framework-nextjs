@@ -59,7 +59,6 @@ const getMenu = async (role_id: string, app_id: string, tracer?: number) => {
     if (error) {
         return [];
     }
-    // return data as Menu[];
     return getMenuParsed(data as Menu[]);
 }
 

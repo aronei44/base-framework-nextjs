@@ -41,7 +41,14 @@ const login = async (username: string, password: string) => {
             const userdata = user;
             delete userdata.password;
             const userjwt = await encrypt(userdata, tracer);
-            await (await redis(securityRedisOptions)).set(id, userjwt.data, 'EX', parseInt(config.SESSION_TIMEOUT));
+            if (config.USE_REDIS) {
+                await (await redis(securityRedisOptions)).set(id, userjwt.data, 'EX', parseInt(config.SESSION_TIMEOUT));
+            } else {
+                const cookiesData = await setCookies(id, userjwt.data, tracer);
+                if (cookiesData.error) {
+                    return {success: false, message: 'Error setting cookie'};
+                }
+            }
             const cookies = await setCookies('session', id, tracer);
             if (cookies.error) {
                 return {success: false, message: 'Error setting cookie'};
@@ -89,19 +96,35 @@ const checkSession = async () => {
             if (session.error) {
                 return {success: false, message: 'No session found'};
             }
-            const data = await (await redis(securityRedisOptions)).get(session.data);
+            let data: string | null = '';
+            if (config.USE_REDIS) {
+                data = await (await redis(securityRedisOptions)).get(session.data);
+            } else {
+                const cookiesData = await getCookies(session.data, tracer);
+                if (cookiesData.error) {
+                    await removeCookies('session', tracer);
+                    return {success: false, message: 'Invalid session'};
+                }
+                data = cookiesData.data;
+            }
             if (!data) {
                 await removeCookies('session', tracer);
                 return {success: false, message: 'Invalid session'};
             }
             const user = await decrypt(data, tracer);
             if (user.error) {
-                await (await redis(securityRedisOptions)).del(session.data);
+                if (config.USE_REDIS) {
+                    await (await redis(securityRedisOptions)).del(session.data);
+                }
                 await removeCookies('session', tracer);
                 return {success: false, message: 'Invalid session'};
             } else {
                 const newdata = await encrypt(user.data, tracer);
-                await (await redis(securityRedisOptions)).set(session.data, newdata.data, 'EX', parseInt(config.SESSION_TIMEOUT));
+                if (config.USE_REDIS) {
+                    await (await redis(securityRedisOptions)).set(session.data, newdata.data, 'EX', parseInt(config.SESSION_TIMEOUT));
+                } else {
+                    await setCookies(session.data, newdata.data, tracer);
+                }
                 await setCookies('session', session.data, tracer);
                 return {success: true, message: 'Session valid', data: user.data};
             }
@@ -121,11 +144,16 @@ const logout = async () => {
     return await safecall({
         name: 'logout',
         fn: async (tracer) => {
+            const config = await getConfig();
             const session = await getCookies('session', tracer);
             if (session.error) {
                 return {success: false, message: 'No session found'};
             }
-            await (await redis(securityRedisOptions)).del(session.data);
+            if (config.USE_REDIS) {
+                await (await redis(securityRedisOptions)).del(session.data);
+            } else {
+                await removeCookies(session.data, tracer);
+            }
             await removeCookies('session', tracer);
             return {success: true, message: 'Session deleted'};
         }
