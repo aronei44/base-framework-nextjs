@@ -6,11 +6,12 @@ import { SidebarProps } from "./types";
 const MenuBar = (props: SidebarProps) => {
     return (
         <>
-            {props.menu.map((item) => {
+            {props.menu.map((item, index) => {
+                const menukey = item.menu_id ?? `submenu-${index}`;
                 if (item.childs) {
                     return (
                         <SubMenu
-                            key={item.menu_id}
+                            key={menukey}
                             title={
                                 <div className="my-2 bg-slate-50 py-2 rounded-md hover:bg-slate-100 cursor-pointer active:bg-slate-200" style={{ paddingLeft: 16 }}>
                                     {item.menu_name}
@@ -23,13 +24,14 @@ const MenuBar = (props: SidebarProps) => {
                 }
                 return (
                     <Link
-                        key={item.menu_id}
+                        key={menukey}
                         href={`${props.prefix}/${item.url}`}
-                        id={item.menu_id}
+                        id={menukey}
                     >
                         <MenuItem
                             className="my-2 bg-slate-50 py-2 rounded-md hover:bg-slate-100 cursor-pointer active:bg-slate-200"
                             style={{ paddingLeft: 16 + (props.level ?? 0) * 16 }}
+                            id={menukey}
                         >
                             {item.menu_name}
                         </MenuItem>

@@ -24,6 +24,7 @@ export const MenuProvider = ({ children }: {
   const param = useParams();
 
   const [menu, setMenu] = useState<Menu[]>([]);
+  const [counter, setCounter] = useState(0);
   const [loading, setLoading] = useState<{
     application: boolean;
     menu: boolean;
@@ -46,10 +47,11 @@ export const MenuProvider = ({ children }: {
   };
 
   useEffect(() => {
-    if (user?.role && !loading.menu && param.application && menu.length === 0) {
+    if (user?.role && !loading.menu && param.application && menu.length === 0 && counter < 2) {
       getMenuList(user.role.role_id, param.application as string);
+      setCounter(prev => prev + 1);
     }
-  }, [user, param, loading.menu, menu]);
+  }, [user, param, loading.menu, menu, counter]);
 
 
   const value = useCallback(()=> {
