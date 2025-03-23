@@ -12,6 +12,7 @@ import {
     AsyncSelect
 } from '.';
 import { useCallback, useEffect } from "react";
+import AsyncSelectMultiple from "./select.async.multiple";
 
 const validationFn = (value: AllType, options: ValidationOptions) => {
     if (options.required && !value) {
@@ -224,6 +225,22 @@ const RenderElement = (props: RenderElementProps) => {
         case 'async-select':
             return (
                 <AsyncSelect
+                    label={props.setup.label}
+                    onChange={onChange}
+                    getData={props.setup.getData}
+                    mapper={props.setup.mapper}
+                    value={props.fields.data[props.name] as string}
+                    disabled={unable}
+                    error={props.fields.errors[props.name]}
+                    required={props.required}
+                    name={props.name}
+                    searchKeyword={props.setup.searchKeyword}
+                />
+            )
+
+        case 'async-select-multiple':
+            return (
+                <AsyncSelectMultiple
                     label={props.setup.label}
                     onChange={onChange}
                     getData={props.setup.getData}

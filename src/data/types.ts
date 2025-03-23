@@ -24,6 +24,8 @@ export type Application = {
     description: string;
     prefix: string;
     is_active: boolean;
+    role_ids?: string;
+    roles?: string[];
 }
 
 export type Menu = {

@@ -44,6 +44,13 @@ export type AsyncSelectProps = {
     searchKeyword: string;
 }
 
+export type AsyncSelectMultipleProps = {
+    label: string;
+    getData: (pagination?: DBPagination, filter?: DBFilter, tracer?: number) => Promise<{data: Record<string, AllType>[], total: number}>
+    mapper: (data: Record<string, AllType>[]) => Array<{ label: string, value: string }>;
+    searchKeyword: string;
+}
+
 export type SelectMultipleProps = {
     label: string;
     options: { label: string, value: string }[];
@@ -142,6 +149,12 @@ export type SwitchFormBuilderProps = {
 } | {
     type: 'async-select';
     setup: AsyncSelectProps;
+} | {
+    type: 'async-select-multiple';
+    setup: AsyncSelectMultipleProps;
+} | {
+    type: 'label';
+    setup: LabelProps;
 };
 
 type RenderElementAdditionalProps = {

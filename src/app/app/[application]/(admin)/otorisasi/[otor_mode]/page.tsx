@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { getOtorisasi, getOtorOne } from "@/data/otorisasi";
 import { metadata as metadataUser } from "../../user/metadata";
 import { metadata as metadataRole } from "../../role/metadata";
+import { metadata as metadataApplication } from "../../apps/application/metadata";
 
 const Otorisasi = () => {
     const param = useParams();
@@ -50,7 +51,8 @@ const Otorisasi = () => {
             }}
             globalMetadata={{
                 'mnuADMUser': metadataUser,
-                'mnuADMRole': metadataRole
+                'mnuADMRole': metadataRole,
+                'mnuADMAppsApplication': metadataApplication
             }}
         />
     )

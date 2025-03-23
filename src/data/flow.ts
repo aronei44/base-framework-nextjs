@@ -6,15 +6,18 @@ import dbconn from "./connection";
 import safecall from "@/extras/safecall";
 import { checkRole, saveRole } from "./role";
 import { checkUser, saveUser } from "./user";
+import { checkApplication, saveApplication } from "./application";
 
 const validationFunction : Record<string, (data: Record<string, AllType>, action_id: string) => Promise<{success:boolean, message: string}>> = {
     'mnuADMUser': checkUser,
-    'mnuADMRole': checkRole
+    'mnuADMRole': checkRole,
+    'mnuADMAppsApplication': checkApplication
 }
 
 const saveFunction: Record<string, (data: Record<string, AllType>, action_id: string) => Promise<string>> = {
     'mnuADMUser': saveUser,
-    'mnuADMRole': saveRole
+    'mnuADMRole': saveRole,
+    'mnuADMAppsApplication': saveApplication
 }
 
 const saveData = async (data: Record<string, AllType>, flow_data: ActionButton, menu_id: string, action_id: string, app_id: string, remark: string, flow_id?: number) => {
