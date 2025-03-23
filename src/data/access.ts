@@ -53,7 +53,9 @@ const getMenu = async (role_id: string, app_id: string, tracer?: number) => {
             and mr.is_active = TRUE
         WHERE 
             m.is_active = TRUE
-            and m.app_id = '${app_id}';
+            and m.app_id = '${app_id}'
+        order by m.menu_order;    
+        ;
     `
     const { data, error } = await dbconn(query, tracer);
     if (error) {
