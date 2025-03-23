@@ -10,6 +10,7 @@ const User = () => {
     const [fields, setFields] = useState<Fields>(defaultFields)
 
     const [filter, setFilter] = useState<Fields>(defaultFields)
+    console.log('fields', fields)
     return (
         <Layout
             columns={columns}

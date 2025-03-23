@@ -106,17 +106,19 @@ const checkUser = async (data: Record<string, AllType>, action_id: string) => {
     if (action_id === 'useradd') {
         const validationResult = await UserCreateSchema.safeParseAsync(data);
         if (!validationResult.success) {
+            const err = validationResult.error.errors[0];
             return {
                 success: false,
-                message: validationResult.error.errors[0].message
+                message: `${err.path}: ${err.message}`
             }
         }
     } else {
         const validationResult = await UserUpdateSchema.safeParseAsync(data);
         if (!validationResult.success) {
+            const err = validationResult.error.errors[0];
             return {
                 success: false,
-                message: validationResult.error.errors[0].message
+                message: `${err.path}: ${err.message}`
             }
         }
     }
