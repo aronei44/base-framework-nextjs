@@ -15,7 +15,7 @@ import ActionCell from "./actioncell";
 import defaultFields from "@/extras/defaultfields";
 import { saveData } from "@/data/flow";
 import { useAuth } from "@/extras/authcontext";
-import { MinimizeMetadaBuilderProps } from "../form/types";
+import { Fields, MinimizeMetadaBuilderProps } from "../form/types";
 
 
 const Layout = (props: LayoutProps) => {
@@ -83,7 +83,7 @@ const Layout = (props: LayoutProps) => {
         if (data.is_must_valid && Object.keys(fields.errors).length > 0) {
             let text = ''
             for (const key in fields.errors) {
-                if (![undefined, null, ''].includes(fields.errors[key])) {
+                if (![undefined, null, ''].includes(fields.errors[key]) && fields.data[key] !== undefined) {
                     text += `<p>${key}: ${fields.errors[key]}</p>`
                 }
             }
@@ -155,12 +155,33 @@ const Layout = (props: LayoutProps) => {
                         }
                     });
                 } else {
+                    const {menu_id, action_id} = dataDB;
+                    const exception: Array<string> = [];
+                    const metadata = props.globalMetadata[menu_id as string];
+                    if (metadata) {
+                        metadata.content.forEach((item) => {
+                            if (typeof item.hidden === 'function') {
+                                if (item.hidden(dataDB.data as Fields, action_id as string)) {
+                                    exception.push(item.name);
+                                }
+                            } else if (typeof item.hidden === 'boolean') {
+                                if (item.hidden) {
+                                    exception.push(item.name);
+                                }
+                            }
+                        });
+                    }
                     setOtorFields({
                         flow_id: dataDB.id as number,
                         flow_state: dataDB.next_state as string,
                         flow_action: dataDB.action_id as string,
                         flow_menu: dataDB.menu_id as string
                     })
+                    exception.forEach((item) => {
+                        if (dataDB.data && typeof dataDB.data === 'object' && item in dataDB.data && !Array.isArray(dataDB.data)) {
+                            delete (dataDB.data as Record<string, AllType>)[item];
+                        }
+                    });
                     props.form.setFields(prev => {
                         return {
                             data: {

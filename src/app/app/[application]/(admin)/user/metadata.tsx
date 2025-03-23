@@ -52,6 +52,9 @@ const metadata : MinimizeMetadaBuilderProps = {
             validation(value, fields, validationFn) {
                 return validationFn(value, { required: true });
             },
+            disabled(fields, state) {
+                return state !== 'useradd';
+            },
         },
         {
             name: 'name',
@@ -83,6 +86,9 @@ const metadata : MinimizeMetadaBuilderProps = {
             },
             validation(value, fields, validationFn) {
                 return validationFn(value, { required: true });
+            },
+            disabled(fields, state) {
+                return state !== 'useradd';
             },
         },
         {
