@@ -43,6 +43,7 @@ const AsyncSelect = (props: AsyncSelectProps & DefaultFormProps) => {
                 name={props.name}
                 id={props.name}
                 value={options.find(option => option.value === props.value)}
+                isDisabled={props.disabled}
             />
             {props.error && <p className="text-red-500 text-sm mt-1">{props.error}</p>}
         </div>

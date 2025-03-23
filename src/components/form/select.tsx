@@ -25,6 +25,7 @@ const Select = (props: SelectProps & DefaultFormProps) => {
                 name={props.name}
                 id={props.name}
                 value={props.options.find(option => option.value === props.value)}
+                isDisabled={props.disabled}
             />
             {props.error && <p className="text-red-500 text-sm mt-1">{props.error}</p>}
         </div>

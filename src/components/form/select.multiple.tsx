@@ -27,6 +27,7 @@ const SelectMultiple = (props: SelectProps & DefaultFormProps) => {
                 name={props.name}
                 id={props.name}
                 value={props.options.filter(option => props.value?.split(',').includes(option.value))}
+                isDisabled={props.disabled}
             />
             {props.error && <p className="text-red-500 text-sm mt-1">{props.error}</p>}
         </div>
